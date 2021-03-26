@@ -1,6 +1,51 @@
 $border-color: #CCCCCC;
 $border-standard: 1px solid $border-color;
+$padding-standard:20px;
+$padding-small:10px;
+$main-dark-color:#007bff;
+$light-text-color: #FFFFFF;
+$margin-standard: 20px;
+$error-color: #FF0000;
+
+.error{
+  font-weight: bold;
+  color:$error-color;
+}
 
 .section{
-  border:  1px solid $border-color;
+  border:  $border-standard;
+  overflow: auto;
+  padding: $padding-standard;
+  margin-bottom: $margin-standard;
+
+  .title{
+    text-align: center;
+    background-color: $main-dark-color;
+    color: $light-text-color;
+    padding: $padding-small;
+    margin-bottom: $margin-standard;
+  }
+
+  .form-group{
+
+    label{
+      margin-bottom:0px;
+    }
+
+    .form-check{
+      margin-bottom:0px;
+    }
+
+    .error{
+      @extend .error;
+    }
+
+  }
+
+}
+
+.data-container{
+  border-top: $border-standard;
+  margin-top:$margin-standard;
+  padding:$padding-standard 0 0 0;
 }

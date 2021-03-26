@@ -1,2 +1,66 @@
 
-<div class="section">{{section.label}}</div>
+<div class="section" *ngIf="section.show">
+  <div class="title">{{section.singleLabel}}</div>
+  <form (ngSubmit)="onSubmit()" #form="ngForm" data-either-validator=".form-check-input" >
+
+    <div class="form-group name">
+      <label for="valore">Valore</label>
+      <input type="text" name="name" #name="ngModel" [(ngModel)]="nomeInput"
+      ngModel id="valore" class="form-control"
+      pattern="[a-zA-Z 0-9]*">
+      <div *ngIf="!name.valid && (name.dirty ||name.touched)" class="error">
+        <div *ngIf="name.errors.pattern">
+         I caratteri ammessi sono  {{name.errors.pattern.requiredPattern}}
+       </div>
+     </div>
+    </div>
+
+    <div class="form-group">
+      <div class="form-check con-errori">
+        <label for="conErrori" class="form-check-label">
+          <input type="checkbox" name="conErrori" #conErrori="ngModel" [(ngModel)]="conErroriInput"
+           id="conErrori" class="form-check-input" >Con errori
+        </label>
+      </div>
+
+      <div class="form-check senza-errori">
+        <label for="senzaErrori" class="form-check-label">
+          <input type="checkbox" name="senzaErrori" #senzaErrori="ngModel" [(ngModel)]="senzaErroriInput"
+           id="senzaErrori" class="form-check-input" >Senza errori
+        </label>
+      </div>
+
+      <div *ngIf="form.errors?.ev && (form.touched || form.dirty)" class="error">
+        Selezionare almeno un'opzione
+      </div>
+    </div>
+
+    <div class="form-group element-per-page">
+      <label for="pagination">Example select</label>
+      <select class="form-control" id="elementPerPage" name="elementPerPage" [(ngModel)]="elementPerPageInput">
+        <option>10</option>
+        <option>25</option>
+        <option>50</option>
+        <option>100</option>
+      </select>
+    </div>
+
+    <div style="text-align: right;">
+        <input type="submit" class="btn btn-primary" [disabled]="form.invalid">
+    </div>
+
+  </form>
+
+  <div class="data-container" *ngIf="dataContainer">
+
+    <div class="spinner-container" *ngIf="spinnerContainer">
+      ...
+    </div>
+
+    <div class="list-container" *ngIf="elementListContainer">
+      <div *ngFor="let element of elementListData.elements"><a href="javascript:void(0)">{{element.name}}</a></div>
+    </div>
+
+  </div>
+
+</div>

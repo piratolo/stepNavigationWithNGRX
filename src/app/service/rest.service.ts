@@ -26,6 +26,6 @@ export class RestService {
   }
 
   getDataWithType<T>(){
-    return this.httpClient.get<T>(environment.restBaseUrl + "getAllApp?numeroPagina=1&numeroElementiPerPagina=25")
+    return this.httpClient.get<T>(environment.restBaseUrl + "getAllByFilter?numeroPagina=1&numeroElementiPerPagina=25")
   }
 }
