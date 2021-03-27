@@ -1,31 +1,38 @@
+import { SectionComponent } from './../section/section.component';
+import { RequestParamHandler } from './../utility/requestParamHandler';
 import { environment } from './../../environments/environment';
-import { FormUtility } from './../utility/formUtility';
 import { Section, SectionType } from './../model/section.model';
 import { Ischema } from './../interface/ischema';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, ElementRef } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RestService {
 
+  requestParamHandler:RequestParamHandler;
+
   constructor(private httpClient:HttpClient) {
+    this.requestParamHandler = new RequestParamHandler();
   }
 
-  getData(section:Section){
+  getDataList(section:Section, sectionComponent: SectionComponent){
       if(section.type == SectionType.SCHEMA){
-        return this.getDataWithType<Ischema>();
+        return this.getDataListWithType<Ischema>(section, sectionComponent);
       }
       if(section.type == SectionType.TABLE){
-        return this.getDataWithType<Ischema>();
+        return this.getDataListWithType<Ischema>(section, sectionComponent);
       }
       if(section.type == SectionType.FIELD){
-        return this.getDataWithType<Ischema>();
+        return this.getDataListWithType<Ischema>(section, sectionComponent);
       }
   }
 
-  getDataWithType<T>(){
-    return this.httpClient.get<T>(environment.restBaseUrl + "getAllByFilter?numeroPagina=1&numeroElementiPerPagina=25")
+  getDataListWithType<T>(section:Section, sectionComponent: SectionComponent){
+    let params =  this.requestParamHandler.requestParamHandler(section, sectionComponent);
+    console.log("params", params);
+    return this.httpClient.get<T>(environment.restBaseUrl + section.elementListUrl + params);
   }
+
 }

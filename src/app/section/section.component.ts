@@ -20,13 +20,13 @@ export class SectionComponent implements OnInit, AfterViewInit {
   @Input() section: Section;
 
   /*campi del form */
-  nomeInput:string;
+  nomeInput:string = "";
   conErroriInput:boolean = true;
   senzaErroriInput:boolean = false;
   elementPerPageInput:number = 25;
 
   /*dati chiamate rest */
-  elementListData;
+  elementListData:Array<any> = [];
 
   /*mostra/nascondi elementi */
   dataContainer:boolean = true;
@@ -41,23 +41,24 @@ export class SectionComponent implements OnInit, AfterViewInit {
   elementDataParser:ElementDataParser;
   fillElementContainer:FillElementContainer;
 
-  constructor(public myElementRef: ElementRef, private restService:RestService, private emitterService:EmitterService) {
-    emitterService.firstLoad.subscribe(()=>{
-      if(this.section.type == SectionType.SCHEMA){
-        this.loadData();
-      }
-    });
+  constructor(public elementRef: ElementRef, private restService:RestService, private emitterService:EmitterService) {
     this.preloadHandler = new PreloadHandler();
     this.elementDataParser = new ElementDataParser();
     this.fillElementContainer = new FillElementContainer();
   }
 
   ngOnInit(): void {
+
+    this.emitterService.firstLoad.subscribe(()=>{
+      if(this.section.type == SectionType.SCHEMA){
+        this.loadData();
+      }
+    });
   }
 
   ngAfterViewInit() {
     let formUtility = new FormUtility();
-    formUtility.initializeForm(this.myElementRef, this.section);
+    formUtility.initializeForm(this.elementRef, this.section);
   }
 
   onSubmit(){
@@ -67,11 +68,13 @@ export class SectionComponent implements OnInit, AfterViewInit {
   }
 
   loadData(){
+    console.log("el", this.elementPerPageInput);
     this.preloadHandler.preload(this);
-    this.restService.getData(this.section).subscribe(
+    this.restService.getDataList(this.section, this).subscribe(
       result => {
       console.log(this);
       this.section.elementListSuccessCallBack(result, this);
+     let a = this.elementListData;
       },
       error =>{
         console.log("erroe", error);

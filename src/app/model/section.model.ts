@@ -21,6 +21,17 @@ export class Section{
   elementListSuccessCallBack: Function;
   elementListDataParser: Function;
   elementListErrorCallBack: Function;
+  fatherObject:object;
+  childObject:object;
+  firstColumn:boolean;
+  lastColumn:boolean;
+  elementPerPage:number;
+  currentPage:number;
+  requestedPage:number;
+  requestParam:string;
+  elementListUrl:string;
+  elementDetailUrl:string;
+  noElementFound:string;
 
   constructor() { }
 

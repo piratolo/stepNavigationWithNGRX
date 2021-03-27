@@ -38,10 +38,10 @@
     <div class="form-group element-per-page">
       <label for="pagination">Example select</label>
       <select class="form-control" id="elementPerPage" name="elementPerPage" [(ngModel)]="elementPerPageInput">
-        <option>10</option>
-        <option>25</option>
-        <option>50</option>
-        <option>100</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
       </select>
     </div>
 
@@ -58,6 +58,7 @@
     </div>
 
     <div class="list-container" *ngIf="elementListContainer">
+      <div *ngIf="elementListData.elements && elementListData.elements < 1">{{section.noElementFound}}</div>
       <div *ngFor="let element of elementListData.elements"><a href="javascript:void(0)">{{element.name}}</a></div>
     </div>
 

@@ -1,10 +1,9 @@
+import { environment } from './../environments/environment';
 import { FillElementContainer } from './utility/fillElementContainer';
 import { ElementDataParser } from './utility/elementDataParser';
 import { EmitterService } from './service/emitter.service';
-import { RestService } from './service/rest.service';
 import { Section, SectionType, LoadType } from './model/section.model';
 import { Component, ViewEncapsulation, OnInit, AfterViewInit} from '@angular/core';
-
 
 @Component({
   selector: 'app-root',
@@ -24,6 +23,8 @@ export class AppComponent implements OnInit, AfterViewInit{
   sectionVisible:Array <boolean> = [true, false, false];
   elementListSuccessCallBack:Array <Function> = [];
   elementListDataParser:Array <Function> = [];
+  elementListUrl:Array <string> = ["getAllByFilter", "getAllByFilter", "getAllByFilter"];
+  noElementFound:Array <string> = ["Nessuno schema trovato", "Nessuna tabella trovata", "Nessun campo trovato"];
 
   sectionObjectList:Array<Section> = [];
 
@@ -44,6 +45,8 @@ export class AppComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
+
+    /*Creazione array section e relativa inizializzazione degli oggetti section*/
      for(var i = 0; i < this.sectionList; i++){
       let section = new Section();
       section.singleLabel = this.singularSectionName[i];
@@ -54,6 +57,23 @@ export class AppComponent implements OnInit, AfterViewInit{
       section.loadType = LoadType.LIST;
       section.elementListSuccessCallBack = this.elementListSuccessCallBack[i];
       section.elementListDataParser = this.elementListDataParser[i];
+      section.requestedPage = 1;
+      section.currentPage = 1;
+      section.elementPerPage = environment.elementPerPage;
+      section.elementListUrl = this.elementListUrl[i];
+      section.noElementFound= this.noElementFound[i];
+      if(i == 0){
+        section.firstColumn = true;
+      }
+      else{
+        section.firstColumn = false;
+      }
+      if(i == (this.sectionList - 1)){
+        section.lastColumn = true;
+      }
+      else{
+        section.lastColumn = false;
+      }
       this.sectionObjectList.push(section);
     }
   }
