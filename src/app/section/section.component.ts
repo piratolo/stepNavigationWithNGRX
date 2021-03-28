@@ -63,7 +63,7 @@ export class SectionComponent implements OnInit, AfterViewInit {
         /*Change detect per evitare l'errore ExpressionChangedAfterItHasBeenCheckedError sul valore elementListContainer,
         che è false ma subito dopo diventa true.
         ATTENZIONE: il detectChange verrà chiamato anche su tutti i componenti figli*/
-        this.cd.detectChanges();
+        //this.cd.detectChanges();
       }
     });
   }
