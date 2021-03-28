@@ -21,6 +21,7 @@ export class Section{
   elementListSuccessCallBack: Function;
   elementListDataParser: Function;
   elementListErrorCallBack: Function;
+  elementListContainerVariable:object
   fatherObject:object;
   childObject:object;
   firstColumn:boolean;
@@ -32,6 +33,8 @@ export class Section{
   elementListUrl:string;
   elementDetailUrl:string;
   noElementFound:string;
+  errorMessage:string;
+
 
   constructor() { }
 

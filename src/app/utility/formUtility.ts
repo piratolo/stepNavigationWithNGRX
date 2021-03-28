@@ -1,10 +1,13 @@
-import { ErrorHandler, ErrorState } from './../error/errorHandler';
+import { ErrorHandler, ErrorType } from './../error/errorHandler';
 import { Section } from './../model/section.model';
 import { ElementRef } from "@angular/core";
 
 export class FormUtility{
 
+  errorHandler:ErrorHandler;
+
   constructor(){
+    this.errorHandler = new ErrorHandler();
   }
 
   initializeForm(form: ElementRef, section:Section):void{
@@ -37,10 +40,8 @@ export class FormUtility{
 
     }
     catch(e){
-      new ErrorHandler(e, "initializeForm",  ErrorState.COMMON);
+      this.errorHandler.showGenericError(e, ErrorType.COMMON, true);
     }
-
-
 
   }
 

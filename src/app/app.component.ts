@@ -62,6 +62,8 @@ export class AppComponent implements OnInit, AfterViewInit{
       section.elementPerPage = environment.elementPerPage;
       section.elementListUrl = this.elementListUrl[i];
       section.noElementFound= this.noElementFound[i];
+      section.errorMessage = "Attenzione: i servizi al momento non sono disponibili";
+
       if(i == 0){
         section.firstColumn = true;
       }

@@ -1,9 +1,7 @@
 import { ElementList } from '../model/elementList.model';
 export class ElementDataParser {
 
-
     elementListdataParser(data:any){
-      console.log("dataParser");
       let newObject = {elements:[]};
       data.elementi.forEach(element => {
         let el = new ElementList();

@@ -31,7 +31,6 @@ export class RestService {
 
   getDataListWithType<T>(section:Section, sectionComponent: SectionComponent){
     let params =  this.requestParamHandler.requestParamHandler(section, sectionComponent);
-    console.log("params", params);
     return this.httpClient.get<T>(environment.restBaseUrl + section.elementListUrl + params);
   }
 

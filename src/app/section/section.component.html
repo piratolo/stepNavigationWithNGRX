@@ -54,12 +54,20 @@
   <div class="data-container" *ngIf="dataContainer">
 
     <div class="spinner-container" *ngIf="spinnerContainer">
-      ...
+      Caricamento in corso
     </div>
 
     <div class="list-container" *ngIf="elementListContainer">
       <div *ngIf="elementListData.elements && elementListData.elements < 1">{{section.noElementFound}}</div>
       <div *ngFor="let element of elementListData.elements"><a href="javascript:void(0)">{{element.name}}</a></div>
+    </div>
+
+    <div class="list-container" *ngIf="elementDetailContainer">
+    detail
+    </div>
+
+    <div class="error-container" *ngIf="errorMessageContainer">
+     {{errorMessage}}
     </div>
 
   </div>
