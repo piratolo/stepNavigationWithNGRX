@@ -13,6 +13,8 @@ import { Component, ViewEncapsulation, OnInit, AfterViewInit} from '@angular/cor
 })
 export class AppComponent implements OnInit, AfterViewInit{
 
+  modifica:object;
+
   title = 'stepNavigation';
 
   sectionList:number = 3;
