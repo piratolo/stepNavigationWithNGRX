@@ -2,7 +2,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { EitherValidatorDirective } from './validator/eitherValidator';
 import { NumberValidatorDirective } from './validator/numberValidator';
 
-import { FormUtility } from './utility/formUtility';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -26,7 +25,7 @@ import { FormsModule } from '@angular/forms';
     FormsModule,
     HttpClientModule
   ],
-  providers: [FormUtility],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

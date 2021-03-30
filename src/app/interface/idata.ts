@@ -1,7 +1,8 @@
+import { IElement } from './iElement';
 import { Ischema } from './ischema';
 export interface Idata {
 
-  elementi:Array<Ischema>;
+  elementi:Array<IElement>;
   numeroPagina:number;
   numeroElementiPerPagina:number;
   numeroTotaleElementi:number;

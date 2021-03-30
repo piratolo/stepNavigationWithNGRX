@@ -1,8 +1,9 @@
-import { ErrorHandler, ErrorType } from './../error/errorHandler';
-import { Section } from './../model/section.model';
+import { SectionComponent } from './../section/section.component';
+import { ErrorHandler, ErrorType } from '../error/errorHandler';
+import { Section } from '../model/section.model';
 import { ElementRef } from "@angular/core";
 
-export class FormUtility{
+export class SectionUtility{
 
   errorHandler:ErrorHandler;
 
@@ -10,13 +11,18 @@ export class FormUtility{
     this.errorHandler = new ErrorHandler();
   }
 
+  initializeSection(sectionComponent: SectionComponent){
+    if(sectionComponent.elementRef){
+      sectionComponent.elementRef.nativeElement.id = sectionComponent.section.id;
+      this.initializeForm(sectionComponent.elementRef, sectionComponent.section);
+    }
+  }
+
   initializeForm(form: ElementRef, section:Section):void{
     try{
       if(form == null){
         return;
       }
-      form.nativeElement.id = 'searchForm' + section.index;
-
       let nameDiv = form.nativeElement.querySelector("div.name");
       if(nameDiv == null) return;
       nameDiv.querySelector("label").innerHTML = "Cerca " + section.pluralLabel;
@@ -35,6 +41,7 @@ export class FormUtility{
 
       let paginationDiv = form.nativeElement.querySelector("div.element-per-page");
       if(paginationDiv == null) return;
+      paginationDiv.querySelector("label").innerHTML = "Elementi per pagina";
       paginationDiv.querySelector("label").setAttribute("for", "elementPerPage" + section.index);
       paginationDiv.querySelector("select").id = "elementPerPage" +  section.index;
 
@@ -43,6 +50,11 @@ export class FormUtility{
       this.errorHandler.showGenericError(e, ErrorType.COMMON, true);
     }
 
+  }
+
+  formReset(sectionComponent:SectionComponent){
+    sectionComponent.section.elementPerPage = sectionComponent.elementPerPageInput;
+    sectionComponent.form.resetForm(sectionComponent.formInitialValue);
   }
 
 }

@@ -9,28 +9,29 @@ export class PreloadHandler{
     this.errorHandler = new ErrorHandler();
   }
 
-  preload(sectionComponent:SectionComponent, section:Section){
+  preload(sectionComponent:SectionComponent){
     if(sectionComponent == null)return;
-    this.errorHandler.showSectionError(sectionComponent, section, false);
-    if(section.loadType === LoadType.LIST){
+    this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, false);
+    if(sectionComponent.section.loadType === LoadType.LIST){
       sectionComponent.elementListData = [];
+      sectionComponent.listContainerPaginationCode = "";
     }
-    else if(section.loadType === LoadType.DETAIL){
+    else if(sectionComponent.section.loadType === LoadType.DETAIL){
       sectionComponent.elementDetailData = [];
     }
     sectionComponent.spinnerContainer = true;
   }
 
-  postLoad(sectionComponent:SectionComponent, section:Section, error?: Error){
+  postLoad(sectionComponent:SectionComponent, error?: Error){
     sectionComponent.spinnerContainer = false;
-    if(section.loadType === LoadType.LIST){
+    if(sectionComponent.section.loadType === LoadType.LIST){
       if(!error)sectionComponent.elementListContainer = true;
     }
-    else if(section.loadType === LoadType.DETAIL){
+    else if(sectionComponent.section.loadType === LoadType.DETAIL){
       if(!error)sectionComponent.elementDetailContainer = true;
     }
     if(error){
-      this.errorHandler.showSectionError(sectionComponent, section, true, error);
+      this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, true, error);
     }
   }
 

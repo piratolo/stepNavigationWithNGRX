@@ -1,17 +1,9 @@
-import { ElementList } from '../model/elementList.model';
+import { Idata } from './../interface/idata';
 export class ElementDataParser {
 
-    elementListdataParser(data:any){
-      let newObject = {elements:[]};
-      data.elementi.forEach(element => {
-        let el = new ElementList();
-        el.name = element.name;
-        el.id = element.id;
-        newObject.elements.push(el);
-      });
-
-      return newObject;
-
+    elementListdataParser(data:Idata){
+      console.log(data);
+      return data;
     }
 
 }

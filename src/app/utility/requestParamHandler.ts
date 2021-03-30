@@ -16,14 +16,14 @@ export class RequestParamHandler{
 
 
 
-     requestParamHandler(section:Section, sectionComponent:SectionComponent){
+     requestParamHandler(sectionComponent:SectionComponent){
       try{
-
         let nome:string = "";
         if(sectionComponent.nomeInput != ""){
           nome = "&nome=" + sectionComponent.nomeInput;
         }
-        return "?numeroPagina=" + section.requestedPage + "&numeroElementiPerPagina=" + sectionComponent.elementPerPageInput + nome + "&conErrori=" + sectionComponent.conErroriInput + "&senzaError=" + sectionComponent.senzaErroriInput;
+        sectionComponent.section.elementPerPage = sectionComponent.elementPerPageInput;
+        return "?numeroPagina=" + sectionComponent.section.requestedPage + "&numeroElementiPerPagina=" + sectionComponent.elementPerPageInput + nome + "&conErrori=" + sectionComponent.conErroriInput + "&senzaError=" + sectionComponent.senzaErroriInput;
       }
       catch(e){
         return "";

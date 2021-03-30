@@ -4,7 +4,7 @@ import { ElementDataParser } from '../utility/elementDataParser';
 import { PreloadHandler } from './../utility/preloadHandler';
 import { EmitterService } from './../service/emitter.service';
 import { RestService } from './../service/rest.service';
-import { FormUtility } from './../utility/formUtility';
+import { SectionUtility } from '../utility/sectionUtility';
 import { Section, SectionType } from './../model/section.model';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Input, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -21,6 +21,8 @@ export class SectionComponent implements OnInit, AfterViewInit {
   @Input() section: Section;
 
   /*campi del form */
+  initialFormValue: Object;
+  formInitialValue = {};
   nomeInput:string = "";
   conErroriInput:boolean = true;
   senzaErroriInput:boolean = false;
@@ -39,12 +41,14 @@ export class SectionComponent implements OnInit, AfterViewInit {
 
   /*elementi html */
   listContainer:any;
+  listContainerPaginationCode:any;
 
   /*classi di utility */
   preloadHandler:PreloadHandler;
   elementDataParser:ElementDataParser;
   fillElementContainer:FillElementContainer;
   errorHandler: ErrorHandler;
+  sectionUtility:SectionUtility;
 
   /*messaggi di error */
   errorMessage:string;
@@ -54,23 +58,24 @@ export class SectionComponent implements OnInit, AfterViewInit {
     this.elementDataParser = new ElementDataParser();
     this.fillElementContainer = new FillElementContainer();
     this.errorHandler = new ErrorHandler();
+    this.sectionUtility = new SectionUtility();
   }
 
   ngOnInit(): void {
+    this.formInitialValue = {name: this.nomeInput, conErrori: this.conErroriInput, senzaErrori: this.senzaErroriInput, elementPerPage: this.elementPerPageInput};
     this.emitterService.firstLoad.subscribe(()=>{
       if(this.section.type == SectionType.SCHEMA){
         this.loadData();
         /*Change detect per evitare l'errore ExpressionChangedAfterItHasBeenCheckedError sul valore elementListContainer,
         che è false ma subito dopo diventa true.
         ATTENZIONE: il detectChange verrà chiamato anche su tutti i componenti figli*/
-        //this.cd.detectChanges();
+        this.cd.detectChanges();
       }
     });
   }
 
   ngAfterViewInit() {
-    let formUtility = new FormUtility();
-    formUtility.initializeForm(this.elementRef, this.section);
+    this.sectionUtility.initializeSection(this);
   }
 
   onSubmit(){
@@ -79,21 +84,24 @@ export class SectionComponent implements OnInit, AfterViewInit {
     }
   }
 
+  formReset(){
+    this.sectionUtility.formReset(this);
+  }
+
   loadData(){
     try{
-
-      this.preloadHandler.preload(this, this.section);
-      this.restService.getDataList(this.section, this).subscribe(
+      this.preloadHandler.preload(this);
+      this.restService.getDataList(this).subscribe(
         result => {
         this.section.elementListSuccessCallBack(result, this);
-        this.preloadHandler.postLoad(this, this.section);
+        this.preloadHandler.postLoad(this);
         },
         error =>{
-          this.preloadHandler.postLoad(this, this.section, error);
+          this.preloadHandler.postLoad(this, error);
         });
     }
     catch(error){
-        this.preloadHandler.postLoad(this, this.section, error);
+        this.preloadHandler.postLoad(this, error);
     }
   }
 

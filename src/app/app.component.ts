@@ -13,16 +13,16 @@ import { Component, ViewEncapsulation, OnInit, AfterViewInit} from '@angular/cor
 })
 export class AppComponent implements OnInit, AfterViewInit{
 
-  modifica:object;
-
   title = 'stepNavigation';
+
+  sectionPrefix:string = "section";
 
   sectionList:number = 3;
   sectionName:Array <string> = ["Schema", "Tabelle", "Campi"];
   singularSectionName:Array <string> = ["Schema", "Tabella", "Campo"];
   sectionType:Array <SectionType> = [SectionType.SCHEMA, SectionType.TABLE, SectionType.FIELD];
   pluralSectionName:Array <string> = ["Schema", "Tabelle", "Campi"];
-  sectionVisible:Array <boolean> = [true, false, false];
+  sectionVisible:Array <boolean> = [true, true, true];
   elementListSuccessCallBack:Array <Function> = [];
   elementListDataParser:Array <Function> = [];
   elementListUrl:Array <string> = ["getAllByFilter", "getAllByFilter", "getAllByFilter"];
@@ -34,16 +34,14 @@ export class AppComponent implements OnInit, AfterViewInit{
   elementDataParser:ElementDataParser;
   fillElementContainer:FillElementContainer;
 
-  constructor(private emitterService:EmitterService){
-    this.fillElementContainer = new FillElementContainer();
-    this.elementListSuccessCallBack.push(this.fillElementContainer.fillElementList);
-    this.elementListSuccessCallBack.push(this.fillElementContainer.fillElementList);
-    this.elementListSuccessCallBack.push(this.fillElementContainer.fillElementList);
+  constructor(private emitterService:EmitterService){;
+    this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
+    this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
+    this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
 
-    this.elementDataParser = new ElementDataParser();
-    this.elementListDataParser.push(this.elementDataParser.elementListdataParser);
-    this.elementListDataParser.push(this.elementDataParser.elementListdataParser);
-    this.elementListDataParser.push(this.elementDataParser.elementListdataParser);
+    this.elementListDataParser.push(new ElementDataParser().elementListdataParser);
+    this.elementListDataParser.push(new ElementDataParser().elementListdataParser);
+    this.elementListDataParser.push(new ElementDataParser().elementListdataParser);
   }
 
   ngOnInit(): void {
@@ -53,6 +51,7 @@ export class AppComponent implements OnInit, AfterViewInit{
       let section = new Section();
       section.singleLabel = this.singularSectionName[i];
       section.pluralLabel = this.pluralSectionName[i];
+      section.id = this.sectionPrefix + i;
       section.index = i;
       section.type = this.sectionType[i];
       section.show = this.sectionVisible[i];

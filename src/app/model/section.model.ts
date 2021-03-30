@@ -34,6 +34,7 @@ export class Section{
   elementDetailUrl:string;
   noElementFound:string;
   errorMessage:string;
+  id:string;
 
 
   constructor() { }

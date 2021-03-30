@@ -17,21 +17,22 @@ export class RestService {
     this.requestParamHandler = new RequestParamHandler();
   }
 
-  getDataList(section:Section, sectionComponent: SectionComponent){
-      if(section.type == SectionType.SCHEMA){
-        return this.getDataListWithType<Ischema>(section, sectionComponent);
+  getDataList(sectionComponent: SectionComponent){
+      if(sectionComponent.section.type == SectionType.SCHEMA){
+        return this.getDataListWithType<Ischema>(sectionComponent);
       }
-      if(section.type == SectionType.TABLE){
-        return this.getDataListWithType<Ischema>(section, sectionComponent);
+      if(sectionComponent.section.type == SectionType.TABLE){
+        return this.getDataListWithType<Ischema>(sectionComponent);
       }
-      if(section.type == SectionType.FIELD){
-        return this.getDataListWithType<Ischema>(section, sectionComponent);
+      if(sectionComponent.section.type == SectionType.FIELD){
+        return this.getDataListWithType<Ischema>(sectionComponent);
       }
   }
 
-  getDataListWithType<T>(section:Section, sectionComponent: SectionComponent){
-    let params =  this.requestParamHandler.requestParamHandler(section, sectionComponent);
-    return this.httpClient.get<T>(environment.restBaseUrl + section.elementListUrl + params);
+  getDataListWithType<T>(sectionComponent: SectionComponent){
+    let params =  this.requestParamHandler.requestParamHandler(sectionComponent);
+    console.log("url per section " + sectionComponent.section.id + ": ", environment.restBaseUrl + sectionComponent.section.elementListUrl + params);
+    return this.httpClient.get<T>(environment.restBaseUrl + sectionComponent.section.elementListUrl + params);
   }
 
 }
