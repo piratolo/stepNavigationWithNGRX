@@ -21,7 +21,8 @@ export class Section{
   elementListSuccessCallBack: Function;
   elementListDataParser: Function;
   elementListErrorCallBack: Function;
-  elementListContainerVariable:object
+  elementListContainerVariable:object;
+  clickOnPaginationCallBack:Function;
   fatherObject:object;
   childObject:object;
   firstColumn:boolean;
@@ -35,7 +36,8 @@ export class Section{
   noElementFound:string;
   errorMessage:string;
   id:string;
-
+  focusElementId:string;
+  dataContainerId:string;
 
   constructor() { }
 

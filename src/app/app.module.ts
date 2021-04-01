@@ -10,13 +10,15 @@ import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SectionComponent } from './section/section.component';
 import { FormsModule } from '@angular/forms';
+import { TrustedContentPipe } from './pipe/trusted-content.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     SectionComponent,
     NumberValidatorDirective,
-    EitherValidatorDirective
+    EitherValidatorDirective,
+    TrustedContentPipe
   ],
   imports: [
     BrowserModule,

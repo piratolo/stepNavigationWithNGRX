@@ -1,17 +1,22 @@
 
 <div class="section" *ngIf="section.show">
-  <div class="title">{{section.singleLabel}}</div>
-  <form (ngSubmit)="onSubmit()" #form="ngForm" data-either-validator=".form-check-input" >
+  <div class="spinner-container sr-only" [innerHTML]="spinnerMessage" role="alert"></div>
+
+  <div class="title"><h2><span class="sr-only">Sezione </span>{{section.singleLabel}}</h2></div>
+  <form (ngSubmit)="onSubmit()" #form="ngForm" data-either-validator=".form-check-input" autocomplete="off">
 
     <div class="form-group name">
       <label for="valore">Valore</label>
       <input type="text" name="name" #name="ngModel" [(ngModel)]="nomeInput"
-      ngModel id="valore" class="form-control"
+      id="valore" class="form-control" minlength="2"
       pattern="[a-zA-Z 0-9]*">
       <div *ngIf="!name.valid && (name.dirty ||name.touched)" class="error">
         <div *ngIf="name.errors.pattern">
          I caratteri ammessi sono  {{name.errors.pattern.requiredPattern}}
        </div>
+       <div *ngIf="name.errors.minlength">
+        Inserire almeno {{name.errors.minlength.requiredLength}} caratteri
+      </div>
      </div>
     </div>
 
@@ -53,19 +58,25 @@
 
   </form>
 
-  <div class="data-container" *ngIf="dataContainer">
 
-    <div class="spinner-container" *ngIf="spinnerContainer">
-      Caricamento in corso
-    </div>
+
+  <div class="data-container" *ngIf="dataContainer" tabindex="0">
+
+    <div class="spinner-container" *ngIf="spinnerContainer" aria-hidden="true">Caricamento in corso...</div>
 
     <div class="list-container" *ngIf="elementListContainer">
-      <div *ngIf="elementListData.elementi && elementListData.elementi < 1">{{section.noElementFound}}</div>
-      <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)">{{element.name}}</a></div>
-      <div class="pagination-container" [innerHtml]="listContainerPaginationCode"></div>
+      <div *ngIf="elementListData.elementi && elementListData.elementi < 1; else sectionTitle">{{section.noElementFound}}</div>
+      <ng-template #sectionTitle><h3 class="">Elenco {{section.pluralLabel}}</h3></ng-template>
+      <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'">{{element.name}}</a></div>
+
+      <div class="pagination-container" [ngClass]="{marginTop: pages !=null && pages?.length > 0}" *ngIf="pages !=null && pages?.length > 0">
+       <ul>
+          <li *ngFor="let page of pages"><a [attr.href]="page.href ? (page.href  | trustedContent : 'url') : null" (click)="page.callback()" title="{{page.title}}" [attr.aria-label]="page.title">{{page.label}}</a></li>
+        </ul>
+      </div>
     </div>
 
-    <div class="list-container" *ngIf="elementDetailContainer">
+    <div class="detail-container" *ngIf="elementDetailContainer">
     detail
     </div>
 
@@ -74,5 +85,6 @@
     </div>
 
   </div>
+
 
 </div>

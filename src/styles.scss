@@ -18,6 +18,11 @@ $error-color: #FF0000;
   padding: $padding-standard;
   margin-bottom: $margin-standard;
 
+  h2{
+    font-size: 1em;
+    margin-bottom:0px;
+  }
+
   .title{
     text-align: center;
     background-color: $main-dark-color;
@@ -49,10 +54,30 @@ $error-color: #FF0000;
     justify-content: flex-start;
   }
 
+  .data-container{
+    border-top: $border-standard;
+    margin-top:$margin-standard;
+    padding:$padding-standard 0 0 0;
+  }
+
+  .pagination-container{
+
+  ul{
+      padding-left:0px;
+      margin-bottom: 0px;
+      margin-top: $margin-standard;
+    }
+
+    li{
+      display: inline;
+      margin-right:10px;
+    }
+  }
+
 }
 
-.data-container{
-  border-top: $border-standard;
-  margin-top:$margin-standard;
-  padding:$padding-standard 0 0 0;
+.margin-top{
+     margin-top:$margin-standard;
 }
+
+

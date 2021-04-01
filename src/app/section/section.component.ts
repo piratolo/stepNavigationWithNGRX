@@ -1,3 +1,5 @@
+import { IPage } from './../interface/ipage';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ErrorHandler, ErrorType } from './../error/errorHandler';
 import { FillElementContainer } from './../utility/fillElementContainer';
 import { ElementDataParser } from '../utility/elementDataParser';
@@ -41,7 +43,7 @@ export class SectionComponent implements OnInit, AfterViewInit {
 
   /*elementi html */
   listContainer:any;
-  listContainerPaginationCode:any;
+  spinnerMessage:string;
 
   /*classi di utility */
   preloadHandler:PreloadHandler;
@@ -53,7 +55,12 @@ export class SectionComponent implements OnInit, AfterViewInit {
   /*messaggi di error */
   errorMessage:string;
 
-  constructor(public elementRef: ElementRef, private restService:RestService, private emitterService:EmitterService, private cd: ChangeDetectorRef) {
+  /*paginazione */
+  pages:Array<IPage> = [];
+
+  firstLoad:boolean = true;
+
+  constructor(public sanitizer: DomSanitizer, public elementRef: ElementRef, private restService:RestService, private emitterService:EmitterService, private cd: ChangeDetectorRef) {
     this.preloadHandler = new PreloadHandler();
     this.elementDataParser = new ElementDataParser();
     this.fillElementContainer = new FillElementContainer();
@@ -62,6 +69,7 @@ export class SectionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.section.clickOnPaginationCallBack = this.loadData.bind(this); this.prova.bind(this);
     this.formInitialValue = {name: this.nomeInput, conErrori: this.conErroriInput, senzaErrori: this.senzaErroriInput, elementPerPage: this.elementPerPageInput};
     this.emitterService.firstLoad.subscribe(()=>{
       if(this.section.type == SectionType.SCHEMA){
@@ -80,6 +88,8 @@ export class SectionComponent implements OnInit, AfterViewInit {
 
   onSubmit(){
     if(this.form.valid){
+      this.section.currentPage = 1;
+      this.section.requestedPage = 1;
       this.loadData();
     }
   }
@@ -103,6 +113,10 @@ export class SectionComponent implements OnInit, AfterViewInit {
     catch(error){
         this.preloadHandler.postLoad(this, error);
     }
+  }
+
+  prova(){
+    alert();
   }
 
 }

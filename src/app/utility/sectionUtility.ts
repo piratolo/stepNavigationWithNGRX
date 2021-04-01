@@ -14,6 +14,8 @@ export class SectionUtility{
   initializeSection(sectionComponent: SectionComponent){
     if(sectionComponent.elementRef){
       sectionComponent.elementRef.nativeElement.id = sectionComponent.section.id;
+      sectionComponent.section.dataContainerId = "data" + sectionComponent.section.index;
+      sectionComponent.elementRef.nativeElement.querySelector(".data-container").id = sectionComponent.section.dataContainerId;
       this.initializeForm(sectionComponent.elementRef, sectionComponent.section);
     }
   }

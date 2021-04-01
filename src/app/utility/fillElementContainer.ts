@@ -7,8 +7,7 @@ export class FillElementContainer{
 
   fillElementList(data:Idata, sectionComponent:SectionComponent){
     sectionComponent.elementListData = sectionComponent.section.elementListDataParser(data);
-    //totalElement, elementPerPage, section:Section
-    sectionComponent.listContainerPaginationCode = new PaginatorHandler().buildPaginator(data.numeroTotaleElementi, data.numeroElementiPerPagina, sectionComponent.section);
-   }
+    new PaginatorHandler().buildPaginator(data.numeroTotaleElementi, data.numeroElementiPerPagina, sectionComponent);
+  }
 
 }

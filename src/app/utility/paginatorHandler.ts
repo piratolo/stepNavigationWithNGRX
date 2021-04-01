@@ -1,5 +1,8 @@
+import { IPage } from './../interface/ipage';
+import { SectionComponent } from './../section/section.component';
 import { ElementRef } from '@angular/core';
 import { Section } from './../model/section.model';
+import { DomSanitizer } from '@angular/platform-browser'
 export class PaginatorHandler{
 
   PAGINATION_CONTAINER_CLASS = "pagination";
@@ -12,7 +15,19 @@ export class PaginatorHandler{
   DISPLAY_DATA_TIMEOUT = 200;
   PAGINATION_CURRENT_ITEM_ATTRIBUTE ="data-item-pagination-current";
 
-  buildPaginator(totalElement, elementPerPage, section:Section):any{
+
+  paginationClickHandler(callBack:Function, sectionComponent:SectionComponent, requestPage:number){
+    sectionComponent.section.requestedPage = requestPage;
+    sectionComponent.section.currentPage = requestPage;
+    callBack();
+  }
+
+
+  buildPaginator(totalElement, elementPerPage, sectionComponent:SectionComponent):any{
+
+console.log("currentPage", sectionComponent.section.currentPage);
+
+
     try{
       var pageNumber = 0;
       if(totalElement > 0 && elementPerPage > 0){
@@ -25,16 +40,16 @@ export class PaginatorHandler{
           return;
       }
       var pagination = this.PAGINATION_CONTAINER_START;
-      if(section.currentPage > 1){
-          pagination = pagination + "<li><a href=\"javascript:void(0)\" aria-label=\"Vai alla prima pagina\" title=\"Vai alla prima pagina\" class=\"" + this.PAGINATION_ITEM_CLASS + "\" " + this.PAGINATION_CURRENT_ITEM_ATTRIBUTE + "=\"1\"><img src=\"/static-dashboardaida-fe/img/icona_freccie-blu_reverse.png\" alt=\"Vai alla prima pagina\"></a></li>";
-          pagination = pagination + "<li><a href=\"javascript:void(0)\" aria-label=\"Vai alla pagina precedente\" title=\"Vai alla pagina precedente\" class=\"" + this.PAGINATION_ITEM_CLASS + "\" " + this.PAGINATION_CURRENT_ITEM_ATTRIBUTE + "=\"" + (section.currentPage - 1) + "\"><img src=\"/static-dashboardaida-fe/img/icona_freccia-blu_reverse.png\" alt=\"Vai alla pagina precedente\"></a></li>";
-      }
+      if(sectionComponent.section.currentPage > 1){
+          sectionComponent.pages.push({number: 1, href: "javascript:void(0)", callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, 1), label: "<<", title: "Vai alla prima pagina"});
+          sectionComponent.pages.push({number: sectionComponent.section.currentPage - 1, href: "javascript:void(0)", callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, sectionComponent.section.currentPage - 1), label: "<", title: "Vai alla pagina precedente"});
+        }
       for(var i = 1; i <= pageNumber; i++){
-          var href = "href=\"javascript:void(0)\"";
+          var href = "javascript:void(0)";
           var currentClass = "";
           var title = i + " - vai alla pagina " + i;
           var itemClass = this.PAGINATION_ITEM_CLASS;
-          if(section.currentPage == i){
+          if(sectionComponent.section.currentPage == i){
               href = "";
               currentClass = "active";
               title = i + " pagina corrente";
@@ -42,20 +57,24 @@ export class PaginatorHandler{
           }
           let linkBeforeAndAfterCurrentPage:number = +(this.LINK_PER_PAGINATION / 2).toFixed(0);
           if(
-              (i <= section.currentPage && (i > section.currentPage - linkBeforeAndAfterCurrentPage) && i >= 1) || (i > pageNumber - this.LINK_PER_PAGINATION && section.currentPage > i)
+              (i <= sectionComponent.section.currentPage && (i > sectionComponent.section.currentPage - linkBeforeAndAfterCurrentPage) && i >= 1) || (i > pageNumber - this.LINK_PER_PAGINATION && sectionComponent.section.currentPage > i)
               ||
-              (i > section.currentPage && (i <= section.currentPage + linkBeforeAndAfterCurrentPage || i <= this.LINK_PER_PAGINATION) && i <= pageNumber)
+              (i > sectionComponent.section.currentPage && (i <= sectionComponent.section.currentPage + linkBeforeAndAfterCurrentPage || i <= this.LINK_PER_PAGINATION) && i <= pageNumber)
               ){
-              pagination = pagination + "<li class=\"" + currentClass + "\"><a " + href + " title=\"" + title + "\" aria-label=\"" + title + "\" class=\"" + itemClass + "\" " + this.PAGINATION_CURRENT_ITEM_ATTRIBUTE + "=\"" + i + "\">" + i + "</a></li>";
-          }
+              sectionComponent.pages.push({number: i, href: href, callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, i), label: ""+i, title: title});
+            }
       }
-      if(section.currentPage < pageNumber){
-          pagination = pagination + "<li><a href=\"javascript:void(0)\" aria-label=\"Vai alla pagina successiva\" title=\"Vai alla pagina successiva\" class=\"" + this.PAGINATION_ITEM_CLASS + "\" " + this.PAGINATION_CURRENT_ITEM_ATTRIBUTE + "=\"" + (+section.currentPage + 1) + "\"><img src=\"/static-dashboardaida-fe/img/icona_freccia-blu.png\" alt=\"Vai alla pagina successiva\"></a></li>";
-          pagination = pagination + "<li><a href=\"javascript:void(0)\" aria-label=\"Vai all'ultima pagina\" title=\"Vai all'ultima pagina\" class=\"" + this.PAGINATION_ITEM_CLASS + "\" " + this.PAGINATION_CURRENT_ITEM_ATTRIBUTE + "=\"" + pageNumber + "\"><img src=\"/static-dashboardaida-fe/img/icona_freccie-blu.png\" alt=\"Vai all'ultima pagina\"></a></li>";
-      }
+      if(sectionComponent.section.currentPage < pageNumber){
+        sectionComponent.pages.push({number: sectionComponent.section.currentPage + 1,  href: "javascript:void(0)", callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, sectionComponent.section.currentPage + 1), label: ">", title: "Vai alla pagina successiva"});
+        sectionComponent.pages.push({number: pageNumber, href: "javascript:void(0)", callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, pageNumber), label: ">>", title: "Vai all'ultima pagina"});
 
-      //console.log("pagination", pagination);
-      return pagination = pagination + this.PAGINATION_CONTAINER_END;
+       }
+
+
+
+
+
+     // return pagination = pagination + this.PAGINATION_CONTAINER_END;
 
       //$(section.htmlContainerSelector).after(pagination);
       //$("#" + section.columnId).find(this.PAGINATION_SELECTOR).fadeIn(this.DISPLAY_DATA_TIMEOUT);
@@ -67,6 +86,7 @@ export class PaginatorHandler{
       }); */
   }
   catch(e){
+    console.log(e);
      // debugMode(e, objectData);
       //errorCodeHandler(PAGINATOR_ERROR, e, objectData);
   }
