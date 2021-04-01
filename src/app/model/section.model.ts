@@ -36,7 +36,6 @@ export class Section{
   noElementFound:string;
   errorMessage:string;
   id:string;
-  focusElementId:string;
   dataContainerId:string;
 
   constructor() { }

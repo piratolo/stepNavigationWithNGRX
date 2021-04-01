@@ -1,6 +1,6 @@
 
 <div class="section" *ngIf="section.show">
-  <div class="spinner-container sr-only" [innerHTML]="spinnerMessage" role="alert"></div>
+  <div class="loading-ended" [innerHTML]="loadingEndedMessage" *ngIf="loadingEnded" class="sr-only"></div>
 
   <div class="title"><h2><span class="sr-only">Sezione </span>{{section.singleLabel}}</h2></div>
   <form (ngSubmit)="onSubmit()" #form="ngForm" data-either-validator=".form-check-input" autocomplete="off">
@@ -62,11 +62,11 @@
 
   <div class="data-container" *ngIf="dataContainer" tabindex="0">
 
-    <div class="spinner-container" *ngIf="spinnerContainer" aria-hidden="true">Caricamento in corso...</div>
+    <div class="spinner-container" *ngIf="spinnerContainer" role="alert" [innerHTML]="spinnerContainerMessage"></div>
 
     <div class="list-container" *ngIf="elementListContainer">
       <div *ngIf="elementListData.elementi && elementListData.elementi < 1; else sectionTitle">{{section.noElementFound}}</div>
-      <ng-template #sectionTitle><h3 class="">Elenco {{section.pluralLabel}}</h3></ng-template>
+      <ng-template #sectionTitle><h3 class="sr-only">Elenco {{section.pluralLabel}}</h3></ng-template>
       <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'">{{element.name}}</a></div>
 
       <div class="pagination-container" [ngClass]="{marginTop: pages !=null && pages?.length > 0}" *ngIf="pages !=null && pages?.length > 0">

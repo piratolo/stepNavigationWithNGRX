@@ -40,10 +40,12 @@ export class SectionComponent implements OnInit, AfterViewInit {
   elementDetailContainer:boolean = false;
   spinnerContainer:boolean = true;
   errorMessageContainer:boolean = false;
+  loadingEnded:boolean = false;
 
   /*elementi html */
   listContainer:any;
-  spinnerMessage:string;
+  loadingEndedMessage:string;
+  spinnerContainerMessage:string;
 
   /*classi di utility */
   preloadHandler:PreloadHandler;

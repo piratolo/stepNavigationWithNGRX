@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { EitherValidatorDirective } from './validator/eitherValidator';
 import { NumberValidatorDirective } from './validator/numberValidator';
 
@@ -11,6 +11,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SectionComponent } from './section/section.component';
 import { FormsModule } from '@angular/forms';
 import { TrustedContentPipe } from './pipe/trusted-content.pipe';
+import { DEFAULT_TIMEOUT, RequestInterceptorService } from './service/request-interceptor.service';
+
 
 @NgModule({
   declarations: [
@@ -27,7 +29,11 @@ import { TrustedContentPipe } from './pipe/trusted-content.pipe';
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [
+              /****** RequestInterceptorService ******/
+              { provide: HTTP_INTERCEPTORS, useClass : RequestInterceptorService, multi:true },
+              { provide: DEFAULT_TIMEOUT, useValue: 180 /*durata timeout*/ }],
+              /****** RequestInterceptorService ******/
   bootstrap: [AppComponent]
 })
 export class AppModule { }
