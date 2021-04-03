@@ -14,6 +14,7 @@ export class PreloadHandler{
     sectionComponent.pages = []
     this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, false);
     if(sectionComponent.section.loadType === LoadType.LIST){
+      sectionComponent.elementTitle = false;
       sectionComponent.elementListData = [];
     }
     else if(sectionComponent.section.loadType === LoadType.DETAIL){
@@ -21,10 +22,12 @@ export class PreloadHandler{
     }
     if(!sectionComponent.firstLoad){
       sectionComponent.loadingEndedMessage = "";
-      sectionComponent.loadingEnded = false;
       sectionComponent.spinnerContainerMessage = "Caricamento in corso";
     }
     sectionComponent.spinnerContainer = true;
+    if(!sectionComponent.firstLoad){
+      sectionComponent.spinnerContainerNativeElement.setAttribute("role", "alert");
+    }
   }
 
   postLoad(sectionComponent:SectionComponent, error?: Error){
@@ -32,8 +35,7 @@ export class PreloadHandler{
     if(!sectionComponent.firstLoad){
       sectionComponent.spinnerContainerMessage = "";
       sectionComponent.loadingEndedMessage = "Caricamento terminato";
-      sectionComponent.loadingEnded = true;
-      sectionComponent.elementRef.nativeElement.focus();
+      sectionComponent.elementRef.nativeElement.querySelector(".loading-ended").focus();
     }
 
     if(sectionComponent.section.loadType === LoadType.LIST){
@@ -44,6 +46,9 @@ export class PreloadHandler{
     }
     if(error){
       this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, true, error);
+    }
+    else{
+      sectionComponent.elementTitle = true;
     }
 
     if(sectionComponent.firstLoad){

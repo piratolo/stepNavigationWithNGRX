@@ -17,7 +17,7 @@ export class RequestInterceptorService implements HttpInterceptor{
   constructor(@Inject(DEFAULT_TIMEOUT) protected defaultTimeout: number) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    console.log("interceptor chiamato");
+    console.log("interceptor chiamato. Timeout:" + this.defaultTimeout);
     return next.handle(req).pipe(timeout(this.defaultTimeout));
   }
 }

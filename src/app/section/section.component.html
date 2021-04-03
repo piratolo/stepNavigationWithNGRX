@@ -1,6 +1,7 @@
 
 <div class="section" *ngIf="section.show">
-  <div class="loading-ended" [innerHTML]="loadingEndedMessage" *ngIf="loadingEnded" class="sr-only"></div>
+
+  <div class="loading-ended" [innerHTML]="loadingEndedMessage" tabindex="0"></div>
 
   <div class="title"><h2><span class="sr-only">Sezione </span>{{section.singleLabel}}</h2></div>
   <form (ngSubmit)="onSubmit()" #form="ngForm" data-either-validator=".form-check-input" autocomplete="off">
@@ -20,25 +21,28 @@
      </div>
     </div>
 
-    <div class="form-group">
-      <div class="form-check con-errori">
-        <label for="conErrori" class="form-check-label">
-          <input type="checkbox" name="conErrori" #conErrori="ngModel" [(ngModel)]="conErroriInput"
-           id="conErrori" class="form-check-input" >Con errori
-        </label>
-      </div>
+    <fieldset>
+      <legend class="sr-only">Seleziona il tipo di status</legend>
+      <div class="form-group">
+        <div class="form-check con-errori">
+          <label for="conErrori" class="form-check-label">
+            <input type="checkbox" name="conErrori" #conErrori="ngModel" [(ngModel)]="conErroriInput"
+            id="conErrori" class="form-check-input" >Con errori
+          </label>
+        </div>
 
-      <div class="form-check senza-errori">
-        <label for="senzaErrori" class="form-check-label">
-          <input type="checkbox" name="senzaErrori" #senzaErrori="ngModel" [(ngModel)]="senzaErroriInput"
-           id="senzaErrori" class="form-check-input" >Senza errori
-        </label>
-      </div>
+        <div class="form-check senza-errori">
+          <label for="senzaErrori" class="form-check-label">
+            <input type="checkbox" name="senzaErrori" #senzaErrori="ngModel" [(ngModel)]="senzaErroriInput"
+            id="senzaErrori" class="form-check-input" >Senza errori
+          </label>
+        </div>
 
-      <div *ngIf="form.errors?.ev && (form.touched || form.dirty)" class="error">
-        Selezionare almeno un'opzione
+        <div *ngIf="form.errors?.ev && (conErrori.touched || conErrori.dirty || senzaErrori.touched || senzaErrori.dirty)" class="error">
+          Selezionare almeno un'opzione
+        </div>
       </div>
-    </div>
+  </fieldset>
 
     <div class="form-group element-per-page">
       <label for="pagination">Example select</label>
@@ -62,11 +66,11 @@
 
   <div class="data-container" *ngIf="dataContainer" tabindex="0">
 
-    <div class="spinner-container" *ngIf="spinnerContainer" role="alert" [innerHTML]="spinnerContainerMessage"></div>
+    <div class="spinner-container" *ngIf="spinnerContainer" [innerHTML]="spinnerContainerMessage"></div>
 
     <div class="list-container" *ngIf="elementListContainer">
       <div *ngIf="elementListData.elementi && elementListData.elementi < 1; else sectionTitle">{{section.noElementFound}}</div>
-      <ng-template #sectionTitle><h3 class="sr-only">Elenco {{section.pluralLabel}}</h3></ng-template>
+      <div *ngIf="elementTitle"><h3 class="sr-only">Elenco {{section.pluralLabel}}</h3></div>
       <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'">{{element.name}}</a></div>
 
       <div class="pagination-container" [ngClass]="{marginTop: pages !=null && pages?.length > 0}" *ngIf="pages !=null && pages?.length > 0">
@@ -85,6 +89,5 @@
     </div>
 
   </div>
-
 
 </div>

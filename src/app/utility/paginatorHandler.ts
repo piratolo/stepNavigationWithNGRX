@@ -1,3 +1,4 @@
+import { ErrorType, ErrorHandler } from './../error/errorHandler';
 import { IPage } from './../interface/ipage';
 import { SectionComponent } from './../section/section.component';
 import { ElementRef } from '@angular/core';
@@ -15,7 +16,6 @@ export class PaginatorHandler{
   DISPLAY_DATA_TIMEOUT = 200;
   PAGINATION_CURRENT_ITEM_ATTRIBUTE ="data-item-pagination-current";
 
-
   paginationClickHandler(callBack:Function, sectionComponent:SectionComponent, requestPage:number){
     sectionComponent.section.requestedPage = requestPage;
     sectionComponent.section.currentPage = requestPage;
@@ -24,10 +24,6 @@ export class PaginatorHandler{
 
 
   buildPaginator(totalElement, elementPerPage, sectionComponent:SectionComponent):any{
-
-console.log("currentPage", sectionComponent.section.currentPage);
-
-
     try{
       var pageNumber = 0;
       if(totalElement > 0 && elementPerPage > 0){
@@ -39,7 +35,6 @@ console.log("currentPage", sectionComponent.section.currentPage);
       if(pageNumber < 2){
           return;
       }
-      var pagination = this.PAGINATION_CONTAINER_START;
       if(sectionComponent.section.currentPage > 1){
           sectionComponent.pages.push({number: 1, href: "javascript:void(0)", callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, 1), label: "<<", title: "Vai alla prima pagina"});
           sectionComponent.pages.push({number: sectionComponent.section.currentPage - 1, href: "javascript:void(0)", callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, sectionComponent.section.currentPage - 1), label: "<", title: "Vai alla pagina precedente"});
@@ -67,28 +62,11 @@ console.log("currentPage", sectionComponent.section.currentPage);
       if(sectionComponent.section.currentPage < pageNumber){
         sectionComponent.pages.push({number: sectionComponent.section.currentPage + 1,  href: "javascript:void(0)", callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, sectionComponent.section.currentPage + 1), label: ">", title: "Vai alla pagina successiva"});
         sectionComponent.pages.push({number: pageNumber, href: "javascript:void(0)", callback: this.paginationClickHandler.bind(this, sectionComponent.section.clickOnPaginationCallBack, sectionComponent, pageNumber), label: ">>", title: "Vai all'ultima pagina"});
-
        }
-
-
-
-
-
-     // return pagination = pagination + this.PAGINATION_CONTAINER_END;
-
-      //$(section.htmlContainerSelector).after(pagination);
-      //$("#" + section.columnId).find(this.PAGINATION_SELECTOR).fadeIn(this.DISPLAY_DATA_TIMEOUT);
-      /* $("#" + section.columnId).find("." + this.PAGINATION_ITEM_CLASS).click(function(){
-
-        section.clickOnPagination = true;
-        section.requestPage = $(this).attr(this.PAGINATION_CURRENT_ITEM_ATTRIBUTE);
-        section.clickCallback();
-      }); */
   }
   catch(e){
     console.log(e);
-     // debugMode(e, objectData);
-      //errorCodeHandler(PAGINATOR_ERROR, e, objectData);
+    new ErrorHandler().showGenericError(e, ErrorType.COMMON, true);
   }
 
   }

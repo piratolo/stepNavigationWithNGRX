@@ -1,9 +1,10 @@
+import { SectionComponent } from './section/section.component';
 import { environment } from './../environments/environment';
 import { FillElementContainer } from './utility/fillElementContainer';
 import { ElementDataParser } from './utility/elementDataParser';
 import { EmitterService } from './service/emitter.service';
 import { Section, SectionType, LoadType } from './model/section.model';
-import { Component, ViewEncapsulation, OnInit, AfterViewInit} from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, AfterViewInit, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -79,6 +80,7 @@ export class AppComponent implements OnInit, AfterViewInit{
       }
       this.sectionObjectList.push(section);
     }
+
   }
 
   ngAfterViewInit(): void {

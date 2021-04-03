@@ -40,12 +40,12 @@ export class SectionComponent implements OnInit, AfterViewInit {
   elementDetailContainer:boolean = false;
   spinnerContainer:boolean = true;
   errorMessageContainer:boolean = false;
-  loadingEnded:boolean = false;
+  elementTitle:boolean=false;
 
   /*elementi html */
   listContainer:any;
   loadingEndedMessage:string;
-  spinnerContainerMessage:string;
+  spinnerContainerMessage:string = "Caricamento in corso";
 
   /*classi di utility */
   preloadHandler:PreloadHandler;
@@ -60,6 +60,9 @@ export class SectionComponent implements OnInit, AfterViewInit {
   /*paginazione */
   pages:Array<IPage> = [];
 
+  /*oggetti HTML */
+  spinnerContainerNativeElement: ElementRef["nativeElement"];
+
   firstLoad:boolean = true;
 
   constructor(public sanitizer: DomSanitizer, public elementRef: ElementRef, private restService:RestService, private emitterService:EmitterService, private cd: ChangeDetectorRef) {
@@ -71,9 +74,14 @@ export class SectionComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.section.clickOnPaginationCallBack = this.loadData.bind(this); this.prova.bind(this);
+    this.section.clickOnPaginationCallBack = this.loadData.bind(this);
     this.formInitialValue = {name: this.nomeInput, conErrori: this.conErroriInput, senzaErrori: this.senzaErroriInput, elementPerPage: this.elementPerPageInput};
+
+    if(!this.section.firstColumn){
+      this.firstLoad = false;
+    }
     this.emitterService.firstLoad.subscribe(()=>{
+      //console.log("ngOnInit:" + this.section.id);
       if(this.section.type == SectionType.SCHEMA){
         this.loadData();
         /*Change detect per evitare l'errore ExpressionChangedAfterItHasBeenCheckedError sul valore elementListContainer,
@@ -82,10 +90,12 @@ export class SectionComponent implements OnInit, AfterViewInit {
         this.cd.detectChanges();
       }
     });
+
   }
 
   ngAfterViewInit() {
     this.sectionUtility.initializeSection(this);
+    this.spinnerContainerNativeElement = this.elementRef.nativeElement.querySelector(".spinner-container");
   }
 
   onSubmit(){
@@ -115,10 +125,6 @@ export class SectionComponent implements OnInit, AfterViewInit {
     catch(error){
         this.preloadHandler.postLoad(this, error);
     }
-  }
-
-  prova(){
-    alert();
   }
 
 }

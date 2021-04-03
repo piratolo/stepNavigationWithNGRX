@@ -22,7 +22,11 @@ export class Section{
   elementListDataParser: Function;
   elementListErrorCallBack: Function;
   elementListContainerVariable:object;
+  elementListClickSuccessCallBack: Function;
   clickOnPaginationCallBack:Function;
+  elementDetailDataParser: Function;
+  elementDetailErrorCallBack: Function;
+  elementDetailContainerVariable:object;
   fatherObject:object;
   childObject:object;
   firstColumn:boolean;

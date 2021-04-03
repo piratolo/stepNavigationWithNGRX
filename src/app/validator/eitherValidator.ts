@@ -17,6 +17,7 @@ export class EitherValidatorDirective implements Validator{
 
   validate(control: AbstractControl) {
 
+
     if(this.controlsSelector === undefined || this.controlsSelector === null || this.controlsSelector == "")
     {
       return null;

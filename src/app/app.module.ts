@@ -12,6 +12,7 @@ import { SectionComponent } from './section/section.component';
 import { FormsModule } from '@angular/forms';
 import { TrustedContentPipe } from './pipe/trusted-content.pipe';
 import { DEFAULT_TIMEOUT, RequestInterceptorService } from './service/request-interceptor.service';
+import { ModalComponent } from './bootstrap/modal/modal.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { DEFAULT_TIMEOUT, RequestInterceptorService } from './service/request-in
     SectionComponent,
     NumberValidatorDirective,
     EitherValidatorDirective,
-    TrustedContentPipe
+    TrustedContentPipe,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +34,7 @@ import { DEFAULT_TIMEOUT, RequestInterceptorService } from './service/request-in
   providers: [
               /****** RequestInterceptorService ******/
               { provide: HTTP_INTERCEPTORS, useClass : RequestInterceptorService, multi:true },
-              { provide: DEFAULT_TIMEOUT, useValue: 180 /*durata timeout*/ }],
+              { provide: DEFAULT_TIMEOUT, useValue: 1000 /*durata timeout*/ }],
               /****** RequestInterceptorService ******/
   bootstrap: [AppComponent]
 })
