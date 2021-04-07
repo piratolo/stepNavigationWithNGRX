@@ -31,6 +31,7 @@ export class NgbdModalContent {
   closeTitle:string = "Chiudi finestra modale";
 
   constructor(public activeModal: NgbActiveModal) {
+
   }
 
 }

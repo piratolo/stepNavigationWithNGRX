@@ -1,25 +1,22 @@
+import { SectionUtility } from './sectionUtility';
 import { LoadType } from './../model/section.model';
 import { ErrorHandler } from './../error/errorHandler';
 import { SectionComponent } from './../section/section.component';
 export class PreloadHandler{
 
   errorHandler: ErrorHandler;
+  sectionUtility: SectionUtility;
 
   constructor(){
     this.errorHandler = new ErrorHandler();
+    this.sectionUtility = new SectionUtility();
   }
 
   preload(sectionComponent:SectionComponent){
     if(sectionComponent == null)return;
-    sectionComponent.pages = []
     this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, false);
-    if(sectionComponent.section.loadType === LoadType.LIST){
-      sectionComponent.elementTitle = false;
-      sectionComponent.elementListData = [];
-    }
-    else if(sectionComponent.section.loadType === LoadType.DETAIL){
-      sectionComponent.elementDetailData = [];
-    }
+    this.sectionUtility.callTypeHandler(sectionComponent);
+    this.sectionUtility.resetDataHandler(sectionComponent);
     if(!sectionComponent.firstLoad){
       sectionComponent.loadingEndedMessage = "";
       sectionComponent.spinnerContainerMessage = "Caricamento in corso";
@@ -38,12 +35,13 @@ export class PreloadHandler{
       sectionComponent.elementRef.nativeElement.querySelector(".loading-ended").focus();
     }
 
-    if(sectionComponent.section.loadType === LoadType.LIST){
+     if(sectionComponent.section.loadType === LoadType.LIST){
       if(!error)sectionComponent.elementListContainer = true;
     }
     else if(sectionComponent.section.loadType === LoadType.DETAIL){
       if(!error)sectionComponent.elementDetailContainer = true;
     }
+
     if(error){
       this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, true, error);
     }

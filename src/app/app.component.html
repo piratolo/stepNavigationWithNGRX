@@ -11,7 +11,7 @@
 </div>
 <div class="row">
   <div class="col-md-12 col-lg-4" *ngFor="let section of sectionObjectList">
-    <app-section [section]="section" tabindex="0" ></app-section>
+    <app-section [section]="section" [sectionComponentArray]="sectionComponents" #sectionComponent></app-section>
   </div>
 </div>
 

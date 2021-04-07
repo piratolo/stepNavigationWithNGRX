@@ -6,4 +6,9 @@ export class ElementDataParser {
       return data;
     }
 
+    elementDetaildataParser(data:Idata){
+      console.log(data);
+      return data;
+    }
+
 }

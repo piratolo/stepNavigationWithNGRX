@@ -66,7 +66,7 @@ export class PaginatorHandler{
   }
   catch(e){
     console.log(e);
-    new ErrorHandler().showGenericError(e, ErrorType.COMMON, true);
+    new ErrorHandler().showGenericError(sectionComponent, e, ErrorType.COMMON, true);
   }
 
   }

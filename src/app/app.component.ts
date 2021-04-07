@@ -1,10 +1,11 @@
 import { SectionComponent } from './section/section.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from './../environments/environment';
 import { FillElementContainer } from './utility/fillElementContainer';
 import { ElementDataParser } from './utility/elementDataParser';
 import { EmitterService } from './service/emitter.service';
 import { Section, SectionType, LoadType } from './model/section.model';
-import { Component, ViewEncapsulation, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, AfterViewInit, ViewChildren, QueryList, ChangeDetectorRef} from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,9 @@ import { Component, ViewEncapsulation, OnInit, AfterViewInit, ViewChild} from '@
   encapsulation:ViewEncapsulation.None
 })
 export class AppComponent implements OnInit, AfterViewInit{
+
+  sectionComponentArray:Array<SectionComponent> = [];
+  @ViewChildren('sectionComponent') sectionComponents: QueryList<SectionComponent>;
 
   title = 'stepNavigation';
 
@@ -23,10 +27,13 @@ export class AppComponent implements OnInit, AfterViewInit{
   singularSectionName:Array <string> = ["Schema", "Tabella", "Campo"];
   sectionType:Array <SectionType> = [SectionType.SCHEMA, SectionType.TABLE, SectionType.FIELD];
   pluralSectionName:Array <string> = ["Schema", "Tabelle", "Campi"];
-  sectionVisible:Array <boolean> = [true, true, true];
+  sectionVisible:Array <boolean> = [true, false, false];
   elementListSuccessCallBack:Array <Function> = [];
   elementListDataParser:Array <Function> = [];
-  elementListUrl:Array <string> = ["getAllByFilter", "getAllByFilter", "getAllByFilter"];
+  elementDetailSuccessCallBack:Array <Function> = [];
+  elementDetailDataParser:Array <Function> = [];
+  elementListUrl:Array <string> = ["getAllByFilter", "getDetailsSchemaById", "getAllByFilter"];
+  elementDetailUrl:Array <string> = ["getDetailsSchemaById", "getDetailsTableById", "getAllByFilter"];
   noElementFound:Array <string> = ["Nessuno schema trovato", "Nessuna tabella trovata", "Nessun campo trovato"];
 
   sectionObjectList:Array<Section> = [];
@@ -35,7 +42,8 @@ export class AppComponent implements OnInit, AfterViewInit{
   elementDataParser:ElementDataParser;
   fillElementContainer:FillElementContainer;
 
-  constructor(private emitterService:EmitterService){;
+  constructor(private emitterService:EmitterService, private cd:ChangeDetectorRef){;
+
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
@@ -43,12 +51,20 @@ export class AppComponent implements OnInit, AfterViewInit{
     this.elementListDataParser.push(new ElementDataParser().elementListdataParser);
     this.elementListDataParser.push(new ElementDataParser().elementListdataParser);
     this.elementListDataParser.push(new ElementDataParser().elementListdataParser);
+
+    this.elementDetailSuccessCallBack.push(new FillElementContainer().fillElementDetail);
+    this.elementDetailSuccessCallBack.push(new FillElementContainer().fillElementDetail);
+    this.elementDetailSuccessCallBack.push(new FillElementContainer().fillElementDetail);
+
+    this.elementDetailDataParser.push(new ElementDataParser().elementDetaildataParser);
+    this.elementDetailDataParser.push(new ElementDataParser().elementDetaildataParser);
+    this.elementDetailDataParser.push(new ElementDataParser().elementDetaildataParser);
   }
 
   ngOnInit(): void {
 
     /*Creazione array section e relativa inizializzazione degli oggetti section*/
-     for(var i = 0; i < this.sectionList; i++){
+    for(var i = 0; i < this.sectionList; i++){
       let section = new Section();
       section.singleLabel = this.singularSectionName[i];
       section.pluralLabel = this.pluralSectionName[i];
@@ -59,10 +75,13 @@ export class AppComponent implements OnInit, AfterViewInit{
       section.loadType = LoadType.LIST;
       section.elementListSuccessCallBack = this.elementListSuccessCallBack[i];
       section.elementListDataParser = this.elementListDataParser[i];
+      section.elementDetailSuccessCallBack = this.elementDetailSuccessCallBack[i];
+      section.elementDetailDataParser = this.elementDetailDataParser[i];
       section.requestedPage = 1;
       section.currentPage = 1;
       section.elementPerPage = environment.elementPerPage;
       section.elementListUrl = this.elementListUrl[i];
+      section.elementDetailUrl = this.elementDetailUrl[i];
       section.noElementFound= this.noElementFound[i];
       section.errorMessage = "Attenzione: i servizi al momento non sono disponibili";
 
@@ -80,11 +99,13 @@ export class AppComponent implements OnInit, AfterViewInit{
       }
       this.sectionObjectList.push(section);
     }
-
   }
 
   ngAfterViewInit(): void {
+    this.cd.detectChanges();
     this.emitterService.firstLoad.emit(true);
+    this.sectionComponents.forEach(sectionComponent => this.sectionComponentArray.push(sectionComponent));
+    this.emitterService.sectionComponentArray.emit(this.sectionComponentArray);
   }
 
 }

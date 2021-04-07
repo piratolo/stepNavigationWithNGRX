@@ -1,10 +1,10 @@
 
-<div class="section" *ngIf="section.show">
+<div class="section" [hidden]="!section.show">
 
   <div class="loading-ended" [innerHTML]="loadingEndedMessage" tabindex="0"></div>
 
-  <div class="title"><h2><span class="sr-only">Sezione </span>{{section.singleLabel}}</h2></div>
-  <form (ngSubmit)="onSubmit()" #form="ngForm" data-either-validator=".form-check-input" autocomplete="off">
+  <div class="title"><h2><span [innerHTML]="titleSection">{{section.singleLabel}}</span><div class="float-right"><a href="javascript:void(0)" [hidden]="!closeDetailButton" class="close-button" (click)="closeDetail()">X</a></div></h2></div>
+  <form (ngSubmit)="onSubmit()" #form="ngForm" data-either-validator=".form-check-input" autocomplete="off" [hidden]="!filterForm">
 
     <div class="form-group name">
       <label for="valore">Valore</label>
@@ -59,19 +59,18 @@
       <input type="submit" class="btn btn-primary" [disabled]="form.invalid" value="Filtra" style="margin-left:auto">
     </div>
 
-
   </form>
 
 
 
-  <div class="data-container" *ngIf="dataContainer" tabindex="0">
+  <div class="data-container" *ngIf="dataContainer">
 
     <div class="spinner-container" *ngIf="spinnerContainer" [innerHTML]="spinnerContainerMessage"></div>
 
-    <div class="list-container" *ngIf="elementListContainer">
+    <div class="list-container" [hidden]="!elementListContainer">
       <div *ngIf="elementListData.elementi && elementListData.elementi < 1; else sectionTitle">{{section.noElementFound}}</div>
       <div *ngIf="elementTitle"><h3 class="sr-only">Elenco {{section.pluralLabel}}</h3></div>
-      <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'">{{element.name}}</a></div>
+      <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'" (click)="section.elementListClickSuccessCallBack(element.id)">{{element.name}}</a></div>
 
       <div class="pagination-container" [ngClass]="{marginTop: pages !=null && pages?.length > 0}" *ngIf="pages !=null && pages?.length > 0">
        <ul>
@@ -81,7 +80,7 @@
     </div>
 
     <div class="detail-container" *ngIf="elementDetailContainer">
-    detail
+    <div data-detail-type [data]="elementDetailData"></div>
     </div>
 
     <div class="error-container" *ngIf="errorMessageContainer">
@@ -89,5 +88,4 @@
     </div>
 
   </div>
-
 </div>

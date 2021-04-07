@@ -1,3 +1,4 @@
+import { NgbdModalContent } from './../bootstrap/modal/modal.component';
 import { Section, LoadType } from './../model/section.model';
 import { SectionComponent } from './../section/section.component';
 
@@ -17,23 +18,22 @@ export class ErrorHandler{
     if(sectionComponent != null && section != null){
       if(show){
         sectionComponent.errorMessage = section.errorMessage;
-      }
-      if(section.loadType === LoadType.LIST){
-        sectionComponent.elementListContainer = !show;
-      }
-      else if(section.loadType === LoadType.DETAIL){
-        sectionComponent.elementDetailContainer = !show;
+        sectionComponent.elementListContainer = false;
+        sectionComponent.elementDetailContainer = false;
       }
       sectionComponent.errorMessageContainer = show;
     }
 
     if(show && error){
-      console.log("Attenzione, si è verificato un errore specifico: " + error.message);
+      this.showGenericError(sectionComponent, error, ErrorType.REST_CALL, true)
     }
   }
 
-  showGenericError(error:Error, errorType: ErrorType, show:boolean){
-    alert("Attenzione, si è verificato un errore generico: " + error.message);
+  showGenericError(sectionComponent: SectionComponent, error:Error, errorType: ErrorType, show:boolean){
+    /* Questo codice apre programmaticamente la popup, senza che sia necessario premere il pulsante */
+    const modalRef = sectionComponent.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.modalTitle = "Attenzione";
+    modalRef.componentInstance.modalContent = "Si è verificato un errore: " + error.message;
   }
 
 }

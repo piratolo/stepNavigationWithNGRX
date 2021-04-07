@@ -20,27 +20,29 @@ export class Section{
   loadType:LoadType;
   elementListSuccessCallBack: Function;
   elementListDataParser: Function;
-  elementListErrorCallBack: Function;
-  elementListContainerVariable:object;
   elementListClickSuccessCallBack: Function;
   clickOnPaginationCallBack:Function;
+  elementDetailSuccessCallBack: Function;
   elementDetailDataParser: Function;
-  elementDetailErrorCallBack: Function;
-  elementDetailContainerVariable:object;
-  fatherObject:object;
-  childObject:object;
+  elementCurrentSuccessCallBack: Function;
+  elementCurrentDataParser: Function;
+  fatherObject:Object;
+  childObject:Object;
   firstColumn:boolean;
   lastColumn:boolean;
   elementPerPage:number;
   currentPage:number;
   requestedPage:number;
-  requestParam:string;
+  requestParam:string ="";
   elementListUrl:string;
   elementDetailUrl:string;
+  elementCurrentUrl: string;
   noElementFound:string;
   errorMessage:string;
   id:string;
   dataContainerId:string;
+  elementDetailId:number;
+  fatherElementDetailId:number;
 
   constructor() { }
 
