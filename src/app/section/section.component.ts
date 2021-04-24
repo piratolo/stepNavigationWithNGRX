@@ -1,5 +1,8 @@
+import { environment } from './../../environments/environment';
+import { Counter } from './../model/counter';
+import { Ischema } from './../interface/ischema';
+import { FieldDetailComponent } from './../model/field-detail/field-detail.component';
 import { RequestParamHandler } from './../utility/requestParamHandler';
-import { NgbdModalContent } from './../bootstrap/modal/modal.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { TableDetailComponent } from './../model/table-detail/table-detail.component';
 import { BaseDetailComponent } from './../model/base-detail/base-detail.component';
@@ -15,9 +18,10 @@ import { EmitterService } from './../service/emitter.service';
 import { RestService } from './../service/rest.service';
 import { SectionUtility } from '../utility/sectionUtility';
 import { LoadType, Section, SectionType } from './../model/section.model';
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, Input, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-section',
@@ -34,8 +38,6 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
     che serve a indentificare l’elemento html che conterrà il component.
     Infatti, all’elemento che deve contenere il component applicheremo il selettore della direttiva DetailTypeDirective*/
   @ViewChild(DetailTypeDirective, {static:false}) detailTypeHost:DetailTypeDirective;
-
-  sectionComponentArray:Array<SectionComponent>;
 
   private firstLoadSubscription:Subscription;
   private loadedDataSubscription:Subscription;
@@ -87,6 +89,8 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   firstLoad:boolean = true;
 
+  @Output("onCounted") counted = new EventEmitter<Counter>();
+
   constructor(
     public sanitizer: DomSanitizer,
     public elementRef: ElementRef,
@@ -114,7 +118,7 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.requestParamHandler.formSubmit(this);
     this.section.clickOnPaginationCallBack = this.loadData.bind(this);
     this.section.elementListClickSuccessCallBack = this.elementListClicked.bind(this);
-    this.formInitialValue = {name: this.nomeInput, conErrori: this.conErroriInput, senzaErrori: this.senzaErroriInput, elementPerPage: this.elementPerPageInput};
+    this.formInitialValue = {name: this.nomeInput, conErrori: this.conErroriInput, senzaErrori: this.senzaErroriInput, elementPerPage: environment.elementPerPage};
 
     if(!this.section.firstColumn){
       this.firstLoad = false;
@@ -122,13 +126,13 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.emitterService.loadedData.subscribe(sectionComponent =>{
       if((sectionComponent.section.index + 1) == this.section.index){
+        this.firstLoad = true;
         this.preloadHandler.preload(this);
         this.section.show = true;
         this.sectionUtility.callTypeHandler(this);
         this.section.elementDetailId = sectionComponent.section.elementDetailId;
         this.section.fatherElementDetailId = sectionComponent.section.elementDetailId;
-        this.formReset();
-        this.fillElementContainer.fillElementList(sectionComponent.elementDetailData, this);
+        this.section.elementListSuccessCallBack(sectionComponent.elementDetailData, this);
         this.sectionUtility.showCurrentDataContainer(this);
         this.preloadHandler.postLoad(this);
       }
@@ -136,9 +140,13 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.emitterService.closeChildSection.subscribe(sectionComponent =>{
       if((sectionComponent.section.index + 1)  == this.section.index){
-        this.emitterService.closeChildSection.emit(this);
-        this.section.show = false;
         this.closeDetail();
+        this.section.show = false;
+        this.section.requestParam = "&conErrori=" + this.formInitialValue['conErrori'] + "&senzaError=" + this.formInitialValue['senzaErrori'];
+        this.section.elementPerPage = this.formInitialValue['elementPerPage'];
+        this.formReset();
+
+       // this.emitterService.closeChildSection.emit(this);
       }
     });
 
@@ -152,18 +160,18 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
 
-  /*   this.emitterService.sectionComponentArray.subscribe(array=>{
-      this.sectionComponentArray = array;
-      console.log("fddsfsd",this.sectionComponentArray);
-    }); */
+    this.emitterService.autoLoading.subscribe(counter =>{
+      if(this.section.index == counter.SectionIndex){
+        this.closeDetail();
+        this.elementListClicked(counter.id, counter.name);
+      }
+    });
 
   }
 
   ngAfterViewInit() {
     this.sectionUtility.initializeSection(this);
     this.spinnerContainerNativeElement = this.elementRef.nativeElement.querySelector(".spinner-container");
-
-
   }
 
   onSubmit(){
@@ -183,7 +191,7 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
   loadData(){
     try{
       this.preloadHandler.preload(this);
-      this.restService.getDataList(this).subscribe(
+      var a = this.restService.getDataList(this).subscribe(
         result => {
         this.preloadHandler.postLoad(this);
         this.section.elementCurrentSuccessCallBack(result, this);
@@ -191,19 +199,26 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
         error =>{
           this.preloadHandler.postLoad(this, error);
         });
+
     }
     catch(error){
         this.preloadHandler.postLoad(this, error);
     }
   }
 
-  elementListClicked(id:number){
+  elementListClicked(id:number, name:string){
+    this.counted.emit(new Counter(name, id, this.section.index));
     this.section.elementDetailId = id;
-
     this.section.loadType = LoadType.DETAIL;
-    console.log("prima", this.section);
+    this.section.elementPerPage = this.formInitialValue['elementPerPage'];
+    const previousCurrentPage =  this.section.currentPage;
+    const previousRequestedPage =  this.section.requestedPage;
+    this.section.currentPage = 1;
+    this.section.requestedPage = 1;
     this.loadData();
-    console.log("dopo", this.section);
+    this.section.elementPerPage = this.elementPerPageInput;
+    this.section.currentPage = previousCurrentPage;
+    this.section.requestedPage = previousRequestedPage;
   }
 
   showDetailTemplate() {
@@ -214,9 +229,12 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
         case SectionType.SCHEMA:
           detailComponent = SchemaDetailComponent;
           break;
-          case SectionType.TABLE:
-            detailComponent = TableDetailComponent;
-            break;
+        case SectionType.TABLE:
+          detailComponent = TableDetailComponent;
+          break;
+        case SectionType.FIELD:
+          detailComponent = FieldDetailComponent;
+          break;
       }
       const detailTemplateCmpFactory = this.componentFactoryResolver.resolveComponentFactory(detailComponent);
       const hostViewContainerRef = this.detailTypeHost.viewContainerRef;
@@ -237,6 +255,7 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.section.requestedPage = 1;
     this.sectionUtility.callTypeHandler(this);
     this.sectionUtility.showCurrentDataContainer(this);
+    console.log("chiudo sezione " + this.section.pluralLabel);
     this.emitterService.closeChildSection.emit(this);
   }
 

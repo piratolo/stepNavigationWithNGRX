@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   restBaseUrl: "http://10.1.60.161/dashboardaida/resources/customer/",
-  elementPerPage: 25
+  elementPerPage: 25,
+  sessionDuration: 30000
 };
 
 /*

@@ -1,0 +1,32 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">ID</th>
+    <th scope="col">Nome</th>
+    <th scope="col">Database</th>
+    <th scope="col">Versione</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let application of applications">
+    <th scope="row">{{ application.idApp }}</th>
+    <td>
+      {{ application.nomeApp }}
+    </td>
+    <td>{{ application.numeroTotaleElementi}}</td>
+    <td>{{ application.versApp }}</td>
+  </tr>
+  </tbody>
+</table>
+
+<div class="d-flex justify-content-between p-2">
+  <ngb-pagination [collectionSize]="collectionSize" [(page)]="page" [pageSize]="pageSize" (pageChange)="refreshCountries()">
+  </ngb-pagination>
+
+  <select class="custom-select" style="width: auto" [(ngModel)]="pageSize" (ngModelChange)="refreshCountries()">
+    <option [ngValue]="10">10</option>
+    <option [ngValue]="25">25</option>
+    <option [ngValue]="50">50</option>
+    <option [ngValue]="100">100</option>
+  </select>
+</div>

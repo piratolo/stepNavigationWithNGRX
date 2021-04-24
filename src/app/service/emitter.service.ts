@@ -1,3 +1,4 @@
+import { Counter } from './../model/counter';
 import { SectionComponent } from './../section/section.component';
 import { EventEmitter, Injectable } from '@angular/core';
 
@@ -11,6 +12,7 @@ export class EmitterService {
   sectionComponentArray = new EventEmitter<Array<SectionComponent>>();
   loadedData = new EventEmitter<SectionComponent>();
   closeChildSection = new EventEmitter<SectionComponent>();
+  autoLoading = new EventEmitter<Counter>();
 
   constructor() { }
 }

@@ -8,6 +8,13 @@ $light-text-color: #FFFFFF;
 $margin-standard: 20px;
 $error-color: #FF0000;
 
+@mixin mixin-title() {
+  text-align: center;
+  background-color: $main-dark-color;
+  color: $light-text-color;
+  padding: $padding-sm;
+}
+
 .error{
   font-weight: bold;
   color:$error-color;
@@ -31,10 +38,7 @@ $error-color: #FF0000;
   }
 
   .title{
-    text-align: center;
-    background-color: $main-dark-color;
-    color: $light-text-color;
-    padding: $padding-sm;
+    @include mixin-title();
 
     .close-button{
       color:#FFFFFF;
@@ -105,7 +109,7 @@ $error-color: #FF0000;
 }
 
 .margin-top{
-     margin-top:$margin-standard;
+  margin-top:$margin-standard;
 }
 
 .modal-button{
@@ -115,5 +119,62 @@ $error-color: #FF0000;
 h1{
   margin-bottom:$margin-standard;
 }
+
+.counters{
+  padding:$margin-standard;
+  border: $border-standard;
+  margin-bottom: $margin-standard;
+
+  .title{
+    @include mixin-title();
+  }
+
+  h2{
+    font-size: 1em;
+    margin-bottom:0px;
+  }
+
+  .counter-container{
+    height: 4em;
+    overflow-y: auto;
+
+    & div:nth-of-type(1){
+    margin-top: $margin-standard;
+    }
+
+  }
+}
+
+app-collapse-basic{
+  p{
+    margin-bottom:0px;
+  }
+
+  button[aria-controls]{
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    background-color: $main-dark-color;
+    color:$light-text-color;
+    width:100%;
+    text-align: left;
+    padding-left:$padding-standard;
+    cursor: pointer;
+  }
+
+  div.card{
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+  }
+}
+
+.applications-container{
+  padding-bottom: $padding-standard;
+}
+
+.no-padding-left{
+  padding-left:0px;
+}
+
+
 
 

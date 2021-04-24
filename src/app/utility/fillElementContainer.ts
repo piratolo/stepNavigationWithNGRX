@@ -14,14 +14,8 @@ export class FillElementContainer{
 
   fillElementDetail(data:Idata, sectionComponent:SectionComponent){
     sectionComponent.elementDetailData = sectionComponent.section.elementCurrentDataParser(data);
-    console.log("XXXXXXXXXXX",  sectionComponent.elementDetailData);
     sectionComponent.showDetailTemplate();
     sectionComponent.emitterService.loadedData.emit(sectionComponent);
-    //const i = sectionComponent.sectionComponentArray.indexOf(sectionComponent);
-  //  if(i + 1 < sectionComponent.sectionComponentArray.length){
-    //  sectionComponent.sectionComponentArray[i + 1].section.show=true;
-   // }
-
   }
 
 }

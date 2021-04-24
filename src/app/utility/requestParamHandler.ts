@@ -21,7 +21,7 @@ export class RequestParamHandler{
         nome = "&nome=" + sectionComponent.nomeInput;
       }
       sectionComponent.section.elementPerPage = sectionComponent.elementPerPageInput;
-      sectionComponent.section.requestParam = "&conErrori=" + sectionComponent.conErroriInput + "&senzaError=" + sectionComponent.senzaErroriInput + nome ;
+      sectionComponent.section.requestParam = "&conErrori=" + sectionComponent.conErroriInput + "&senzaErrori=" + sectionComponent.senzaErroriInput + nome ;
 
     }
 
@@ -30,7 +30,6 @@ export class RequestParamHandler{
         let id:string ="";
         if((sectionComponent.section.loadType === LoadType.DETAIL && sectionComponent.section.index == 0) || (sectionComponent.section.index > 0)){
           id = "/" + sectionComponent.section.elementDetailId;
-          console.log("id", id)
           return id + "?numeroPagina=" + sectionComponent.section.requestedPage + "&numeroElementiPerPagina=" + sectionComponent.section.elementPerPage + sectionComponent.section.requestParam;
         }
         else{

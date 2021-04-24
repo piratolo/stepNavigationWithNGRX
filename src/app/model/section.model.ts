@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { Idata } from './../interface/idata';
 export enum SectionType{
   SCHEMA,
@@ -43,6 +44,8 @@ export class Section{
   dataContainerId:string;
   elementDetailId:number;
   fatherElementDetailId:number;
+  abortRestCall:boolean;
+  elementViewed:string;
 
   constructor() { }
 

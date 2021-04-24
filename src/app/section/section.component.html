@@ -3,7 +3,7 @@
 
   <div class="loading-ended" [innerHTML]="loadingEndedMessage" tabindex="0"></div>
 
-  <div class="title"><h2><span [innerHTML]="titleSection">{{section.singleLabel}}</span><div class="float-right"><a href="javascript:void(0)" [hidden]="!closeDetailButton" class="close-button" (click)="closeDetail()">X</a></div></h2></div>
+  <div class="title"><h2><span [innerHTML]="titleSection">{{section.singleLabel}}</span><span class="float-right"><a href="javascript:void(0)" [hidden]="!closeDetailButton" class="close-button" (click)="closeDetail()">X</a></span></h2></div>
   <form (ngSubmit)="onSubmit()" #form="ngForm" data-either-validator=".form-check-input" autocomplete="off" [hidden]="!filterForm">
 
     <div class="form-group name">
@@ -45,7 +45,7 @@
   </fieldset>
 
     <div class="form-group element-per-page">
-      <label for="pagination">Example select</label>
+      <label for="pagination">Elementi per pagina</label>
       <select class="form-control" id="elementPerPage" name="elementPerPage" [(ngModel)]="elementPerPageInput">
         <option value="10">10</option>
         <option value="25" selected>25</option>
@@ -70,7 +70,7 @@
     <div class="list-container" [hidden]="!elementListContainer">
       <div *ngIf="elementListData.elementi && elementListData.elementi < 1; else sectionTitle">{{section.noElementFound}}</div>
       <div *ngIf="elementTitle"><h3 class="sr-only">Elenco {{section.pluralLabel}}</h3></div>
-      <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'" (click)="section.elementListClickSuccessCallBack(element.id)">{{element.name}}</a></div>
+      <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'" (click)="section.elementListClickSuccessCallBack(element.id, element.name)">{{element.name}}</a></div>
 
       <div class="pagination-container" [ngClass]="{marginTop: pages !=null && pages?.length > 0}" *ngIf="pages !=null && pages?.length > 0">
        <ul>

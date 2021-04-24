@@ -17,8 +17,9 @@ export class PreloadHandler{
     this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, false);
     this.sectionUtility.callTypeHandler(sectionComponent);
     this.sectionUtility.resetDataHandler(sectionComponent);
+    sectionComponent.loadingEndedMessage = "";
     if(!sectionComponent.firstLoad){
-      sectionComponent.loadingEndedMessage = "";
+
       sectionComponent.spinnerContainerMessage = "Caricamento in corso";
     }
     sectionComponent.spinnerContainer = true;

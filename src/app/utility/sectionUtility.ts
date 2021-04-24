@@ -57,7 +57,7 @@ export class SectionUtility{
   }
 
   formReset(sectionComponent:SectionComponent){
-    sectionComponent.section.elementPerPage = sectionComponent.elementPerPageInput;
+    //sectionComponent.section.elementPerPage = sectionComponent.formInitialValue['elementPerPageInput'];
     sectionComponent.form.resetForm(sectionComponent.formInitialValue);
   }
 

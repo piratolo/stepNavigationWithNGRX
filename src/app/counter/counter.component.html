@@ -1,0 +1,6 @@
+<div class="counters" [hidden]="counter?.length < 1">
+  <div class="title"><h2>{{section.pluralLabel}} {{section.elementViewed}}</h2></div>
+  <div class="counter-container">
+    <div class="counter" *ngFor="let c of counter"><a href="javascript:void(0)" (click)="counterClicked(c)">{{c.name}}</a></div>
+  </div>
+</div>

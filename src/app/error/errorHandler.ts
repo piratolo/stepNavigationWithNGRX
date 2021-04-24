@@ -1,5 +1,6 @@
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgbdModalContent } from './../bootstrap/modal/modal.component';
-import { Section, LoadType } from './../model/section.model';
+import { Section } from './../model/section.model';
 import { SectionComponent } from './../section/section.component';
 
 export enum ErrorType{
@@ -32,6 +33,13 @@ export class ErrorHandler{
   showGenericError(sectionComponent: SectionComponent, error:Error, errorType: ErrorType, show:boolean){
     /* Questo codice apre programmaticamente la popup, senza che sia necessario premere il pulsante */
     const modalRef = sectionComponent.modalService.open(NgbdModalContent);
+    modalRef.componentInstance.modalTitle = "Attenzione";
+    modalRef.componentInstance.modalContent = "Si è verificato un errore: " + error.message;
+  }
+
+  showError(modalService: NgbModal, error:Error){
+    /* Questo codice apre programmaticamente la popup, senza che sia necessario premere il pulsante */
+    const modalRef = modalService.open(NgbdModalContent);
     modalRef.componentInstance.modalTitle = "Attenzione";
     modalRef.componentInstance.modalContent = "Si è verificato un errore: " + error.message;
   }

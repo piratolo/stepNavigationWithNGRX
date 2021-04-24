@@ -1,3 +1,5 @@
+import { AuthService } from './service/auth.service';
+import { Counter } from './model/counter';
 import { SectionComponent } from './section/section.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from './../environments/environment';
@@ -32,17 +34,19 @@ export class AppComponent implements OnInit, AfterViewInit{
   elementListDataParser:Array <Function> = [];
   elementDetailSuccessCallBack:Array <Function> = [];
   elementDetailDataParser:Array <Function> = [];
-  elementListUrl:Array <string> = ["getAllByFilter", "getDetailsSchemaById", "getAllByFilter"];
-  elementDetailUrl:Array <string> = ["getDetailsSchemaById", "getDetailsTableById", "getAllByFilter"];
+  elementListUrl:Array <string> = ["getAllByFilter", "getDetailsSchemaById", "getDetailsTableById"];
+  elementDetailUrl:Array <string> = ["getDetailsSchemaById", "getDetailsTableById", "getDetailsColumnById"];
   noElementFound:Array <string> = ["Nessuno schema trovato", "Nessuna tabella trovata", "Nessun campo trovato"];
-
+  elementViewed:Array <string> = ["visualizzati", "visualizzate", "visualizzati"];
   sectionObjectList:Array<Section> = [];
+
+  counterArray:Array<Array<Counter>> = [];
 
   /*funzioni di callback */
   elementDataParser:ElementDataParser;
   fillElementContainer:FillElementContainer;
 
-  constructor(private emitterService:EmitterService, private cd:ChangeDetectorRef){;
+  constructor(private emitterService:EmitterService, private cd:ChangeDetectorRef, private authService:AuthService){;
 
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
@@ -62,6 +66,12 @@ export class AppComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
+
+    this.authService.autoLogin();
+
+    for(var i = 0; i < 3; i++){
+      this.counterArray.push(new Array<Counter>());
+    }
 
     /*Creazione array section e relativa inizializzazione degli oggetti section*/
     for(var i = 0; i < this.sectionList; i++){
@@ -83,6 +93,8 @@ export class AppComponent implements OnInit, AfterViewInit{
       section.elementListUrl = this.elementListUrl[i];
       section.elementDetailUrl = this.elementDetailUrl[i];
       section.noElementFound= this.noElementFound[i];
+      section.noElementFound= this.noElementFound[i];
+      section.elementViewed= this.elementViewed[i];
       section.errorMessage = "Attenzione: i servizi al momento non sono disponibili";
 
       if(i == 0){
@@ -106,6 +118,23 @@ export class AppComponent implements OnInit, AfterViewInit{
     this.emitterService.firstLoad.emit(true);
     this.sectionComponents.forEach(sectionComponent => this.sectionComponentArray.push(sectionComponent));
     this.emitterService.sectionComponentArray.emit(this.sectionComponentArray);
+  }
+
+  onCounted(counter:Counter){
+    this.counterArray[counter.SectionIndex].forEach(element => {
+      if(element.Id == counter.Id){
+        const index = this.counterArray[counter.SectionIndex].indexOf(element);
+        if(index > -1)this.counterArray[counter.SectionIndex].splice(index, 1);
+      }
+    });
+
+    this.counterArray[counter.SectionIndex].unshift(counter);
+    console.log(this.counterArray);
+  }
+
+  counterClicked(counterCliked:Counter){
+    console.log("AppComponent", counterCliked);
+    this.emitterService.autoLoading.emit(counterCliked);
   }
 
 }

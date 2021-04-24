@@ -1,17 +1,34 @@
+
+<div class="col-xs-12">
+  <app-auth></app-auth>
+</div>
+
 <div class="col-xs-12">
   <ngbd-modal-component [modalTitle]="'Come utilizzare l&acute;applicazione'" [buttonLabel]="'Istruzioni'">
     <div #content>
       <ul>
-          <li>La prima colonna mostra gli schema</li>
-          <li>La seconda colonna mostra le tabelle</li>
-          <li>La terza colonna mostra i campi</li>
+        <li>La prima colonna mostra gli schema</li>
+        <li>La seconda colonna mostra le tabelle</li>
+        <li>La terza colonna mostra i campi</li>
       </ul>
     </div>
   </ngbd-modal-component>
 </div>
-<div class="row">
-  <div class="col-md-12 col-lg-4" *ngFor="let section of sectionObjectList">
-    <app-section [section]="section" [sectionComponentArray]="sectionComponents" #sectionComponent></app-section>
-  </div>
+
+<div class="col-xs-12 applications-container">
+  <app-collapse-basic [buttonLabel]="'Applicazioni'" [id]="'idCollapse'"><app-application-form></app-application-form></app-collapse-basic>
 </div>
 
+<div class="row sections-container">
+  <div class="col-md-12 col-lg-4" *ngFor="let counter of counterArray; let i = index"
+    [hidden]="!sectionObjectList[i].show">
+    <app-counter [counter]="counter" [section]="sectionObjectList[i]" (onCounterClick)="counterClicked($event)">
+    </app-counter>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-12 col-lg-4" *ngFor="let section of sectionObjectList">
+    <app-section [section]="section" [sectionComponentArray]="sectionComponents" #sectionComponent
+      (onCounted)="onCounted($event)"></app-section>
+  </div>
+</div>

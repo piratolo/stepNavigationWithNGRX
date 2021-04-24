@@ -1,0 +1,31 @@
+<form [formGroup]="applicatonForm" (ngSubmit)="onSubmit()">
+
+
+  <div class="row">
+    <div class="form-group col-xs-12 col-sm-6">
+      <label for="applicationName">Nome applicazione</label>
+      <input type="text" class="form-control" id="applicationName" [formControlName]="'applicationName'">
+      <div *ngIf="!applicatonForm.get('applicationName').valid && (applicatonForm.get('applicationName').dirty || applicatonForm.get('applicationName').touched)" class="error">
+       <div *ngIf="applicatonForm.get('applicationName').errors.pattern">
+        I caratteri ammessi sono i seguenti: {{applicatonForm.get('applicationName').errors.pattern.requiredPattern}}
+       </div>
+     </div>
+    </div>
+    <div class="form-group col-xs-12 col-sm-6">
+      <app-element-per-page [control]="applicatonForm.get('elementPerPage')" [idPrefix]="'application'" [controlName]="'applicationElementPerPage'" [labelText]="'Elementi per applicazione'"></app-element-per-page>
+      <div *ngIf="!applicatonForm.get('elementPerPage').valid && (applicatonForm.get('elementPerPage').dirty || applicatonForm.get('elementPerPage').touched)" class="error">
+        <div *ngIf="applicatonForm.get('elementPerPage').errors.epp">
+        E' necessario selezionare più di {{applicatonForm.get('elementPerPage').errors.epp.min}} elementi
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div class="float-right">
+      <input type="submit" value="Cerca"  [disabled]="applicatonForm.invalid" class="btn btn-primary" [title]="applicatonForm.invalid ? 'Per effettuare la ricerca compilare correttamente il form' : ' Avvia la ricerca'">
+    </div>
+
+    <ngbd-table-pagination [data]="data" *ngIf="showTable"></ngbd-table-pagination>
+
+
+</form>

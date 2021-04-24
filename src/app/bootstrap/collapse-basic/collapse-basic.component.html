@@ -1,0 +1,13 @@
+<p>
+  <button type="button" class="btn btn-outline-primary" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed"
+    [attr.aria-controls]="id">
+   {{buttonLabel}}
+  </button>
+</p>
+<div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" id="{{id}}">
+  <div class="card">
+    <div class="card-body">
+     <ng-content></ng-content>
+    </div>
+  </div>
+</div>
