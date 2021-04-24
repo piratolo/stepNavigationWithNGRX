@@ -48,7 +48,7 @@ export class AppComponent implements OnInit, AfterViewInit{
 
   constructor(private emitterService:EmitterService, private cd:ChangeDetectorRef, private authService:AuthService){;
 
-    this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
+   /*  this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
 
@@ -62,65 +62,65 @@ export class AppComponent implements OnInit, AfterViewInit{
 
     this.elementDetailDataParser.push(new ElementDataParser().elementDetaildataParser);
     this.elementDetailDataParser.push(new ElementDataParser().elementDetaildataParser);
-    this.elementDetailDataParser.push(new ElementDataParser().elementDetaildataParser);
+    this.elementDetailDataParser.push(new ElementDataParser().elementDetaildataParser); */
   }
 
   ngOnInit(): void {
 
-    this.authService.autoLogin();
+    // this.authService.autoLogin();
 
-    for(var i = 0; i < 3; i++){
-      this.counterArray.push(new Array<Counter>());
-    }
+    // for(var i = 0; i < 3; i++){
+    //   this.counterArray.push(new Array<Counter>());
+    // }
 
-    /*Creazione array section e relativa inizializzazione degli oggetti section*/
-    for(var i = 0; i < this.sectionList; i++){
-      let section = new Section();
-      section.singleLabel = this.singularSectionName[i];
-      section.pluralLabel = this.pluralSectionName[i];
-      section.id = this.sectionPrefix + i;
-      section.index = i;
-      section.type = this.sectionType[i];
-      section.show = this.sectionVisible[i];
-      section.loadType = LoadType.LIST;
-      section.elementListSuccessCallBack = this.elementListSuccessCallBack[i];
-      section.elementListDataParser = this.elementListDataParser[i];
-      section.elementDetailSuccessCallBack = this.elementDetailSuccessCallBack[i];
-      section.elementDetailDataParser = this.elementDetailDataParser[i];
-      section.requestedPage = 1;
-      section.currentPage = 1;
-      section.elementPerPage = environment.elementPerPage;
-      section.elementListUrl = this.elementListUrl[i];
-      section.elementDetailUrl = this.elementDetailUrl[i];
-      section.noElementFound= this.noElementFound[i];
-      section.noElementFound= this.noElementFound[i];
-      section.elementViewed= this.elementViewed[i];
-      section.errorMessage = "Attenzione: i servizi al momento non sono disponibili";
+    // /*Creazione array section e relativa inizializzazione degli oggetti section*/
+    // for(var i = 0; i < this.sectionList; i++){
+    //   let section = new Section();
+    //   section.singleLabel = this.singularSectionName[i];
+    //   section.pluralLabel = this.pluralSectionName[i];
+    //   section.id = this.sectionPrefix + i;
+    //   section.index = i;
+    //   section.type = this.sectionType[i];
+    //   section.show = this.sectionVisible[i];
+    //   section.loadType = LoadType.LIST;
+    //   section.elementListSuccessCallBack = this.elementListSuccessCallBack[i];
+    //   section.elementListDataParser = this.elementListDataParser[i];
+    //   section.elementDetailSuccessCallBack = this.elementDetailSuccessCallBack[i];
+    //   section.elementDetailDataParser = this.elementDetailDataParser[i];
+    //   section.requestedPage = 1;
+    //   section.currentPage = 1;
+    //   section.elementPerPage = environment.elementPerPage;
+    //   section.elementListUrl = this.elementListUrl[i];
+    //   section.elementDetailUrl = this.elementDetailUrl[i];
+    //   section.noElementFound= this.noElementFound[i];
+    //   section.noElementFound= this.noElementFound[i];
+    //   section.elementViewed= this.elementViewed[i];
+    //   section.errorMessage = "Attenzione: i servizi al momento non sono disponibili";
 
-      if(i == 0){
-        section.firstColumn = true;
-      }
-      else{
-        section.firstColumn = false;
-      }
-      if(i == (this.sectionList - 1)){
-        section.lastColumn = true;
-      }
-      else{
-        section.lastColumn = false;
-      }
-      this.sectionObjectList.push(section);
-    }
+    //   if(i == 0){
+    //     section.firstColumn = true;
+    //   }
+    //   else{
+    //     section.firstColumn = false;
+    //   }
+    //   if(i == (this.sectionList - 1)){
+    //     section.lastColumn = true;
+    //   }
+    //   else{
+    //     section.lastColumn = false;
+    //   }
+    //   this.sectionObjectList.push(section);
+    // }
   }
 
   ngAfterViewInit(): void {
-    this.cd.detectChanges();
-    this.emitterService.firstLoad.emit(true);
-    this.sectionComponents.forEach(sectionComponent => this.sectionComponentArray.push(sectionComponent));
-    this.emitterService.sectionComponentArray.emit(this.sectionComponentArray);
+    // this.cd.detectChanges();
+    // this.emitterService.firstLoad.emit(true);
+    // this.sectionComponents.forEach(sectionComponent => this.sectionComponentArray.push(sectionComponent));
+    // this.emitterService.sectionComponentArray.emit(this.sectionComponentArray);
   }
 
-  onCounted(counter:Counter){
+ /*  onCounted(counter:Counter){
     this.counterArray[counter.SectionIndex].forEach(element => {
       if(element.Id == counter.Id){
         const index = this.counterArray[counter.SectionIndex].indexOf(element);
@@ -135,6 +135,6 @@ export class AppComponent implements OnInit, AfterViewInit{
   counterClicked(counterCliked:Counter){
     console.log("AppComponent", counterCliked);
     this.emitterService.autoLoading.emit(counterCliked);
-  }
+  } */
 
 }

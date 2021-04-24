@@ -1,7 +1,10 @@
+import { RouteGuardService } from './../service/route-guard.service';
+import { MainComponent } from './../main/main.component';
 import { AppComponent } from './../app.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthComponent } from '../auth/auth.component';
 
 const routes:Routes = [
   {
@@ -11,7 +14,12 @@ const routes:Routes = [
   },
   {
     path: "home",
-    component: AppComponent
+    component: MainComponent,
+    canActivate: [RouteGuardService]
+  },
+  {
+    path:'login',
+    component: AuthComponent
   }
 ];
 
@@ -23,6 +31,7 @@ const routes:Routes = [
   ],
   exports: [
     RouterModule
-  ]
+  ],
+  providers: [RouteGuardService]
 })
 export class RoutingModule { }

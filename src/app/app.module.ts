@@ -23,6 +23,7 @@ import { ApplicationFormComponent } from './form/application-form/application-fo
 import { ElementPerPageComponent } from './element-per-page/element-per-page.component';
 import { ApplicationTableComponent } from './application-table/application-table.component';
 import { AuthComponent } from './auth/auth.component';
+import { MainComponent } from './main/main.component';
 
 
 @NgModule({
@@ -42,7 +43,8 @@ import { AuthComponent } from './auth/auth.component';
     ApplicationFormComponent,
     ElementPerPageComponent,
     ApplicationTableComponent,
-    AuthComponent
+    AuthComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,

@@ -40,7 +40,7 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(DetailTypeDirective, {static:false}) detailTypeHost:DetailTypeDirective;
 
   private firstLoadSubscription:Subscription;
-  private loadedDataSubscription:Subscription;
+ // private loadedDataSubscription:Subscription;
 
   /*campi del form */
   initialFormValue: Object;
@@ -111,7 +111,7 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.firstLoadSubscription.unsubscribe();
-    this.loadedDataSubscription.unsubscribe();
+    //this.loadedDataSubscription.unsubscribe();
   }
 
   ngOnInit(): void {
