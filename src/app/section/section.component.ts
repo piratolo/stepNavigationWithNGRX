@@ -255,7 +255,6 @@ export class SectionComponent implements OnInit, AfterViewInit, OnDestroy {
     this.section.requestedPage = 1;
     this.sectionUtility.callTypeHandler(this);
     this.sectionUtility.showCurrentDataContainer(this);
-    console.log("chiudo sezione " + this.section.pluralLabel);
     this.emitterService.closeChildSection.emit(this);
   }
 

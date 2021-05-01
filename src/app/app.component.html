@@ -1,39 +1,17 @@
-<!--
-<div class="col-xs-12">
-  <app-auth></app-auth>
-</div>
-
-<div class="col-xs-12">
-  <ngbd-modal-component [modalTitle]="'Come utilizzare l&acute;applicazione'" [buttonLabel]="'Istruzioni'">
-    <div #content>
-      <ul>
-        <li>La prima colonna mostra gli schema</li>
-        <li>La seconda colonna mostra le tabelle</li>
-        <li>La terza colonna mostra i campi</li>
+<div class="row">
+    <div class="col-12">
+      <ul class="list-inline">
+        <!--Con questo sistema aggiungiamo una classe quando il link e seleziato e mettiamo il tabindex a -1.
+        Inoltre,  impostiamo routerLink a null se il link è selezionato -->
+        <li class="list-inline-item"><a href="javascript:void(0)" [routerLink]="'/index'" [routerLinkActive]="'active-link'" [routerLinkActiveOptions]="{exact:true}" #rlai="routerLinkActive"  [tabindex]="rlai.isActive ? '-1' : '0'">Index</a></li>
+        <li class="list-inline-item"><a href="javascript:void(0)" [routerLink]="'/console'" [routerLinkActive]="'active-link'" [routerLinkActiveOptions]="{exact:true}" #rlah="routerLinkActive"  [tabindex]="rlah.isActive ? '-1' : '0'">Console</a></li>
+        <li class="list-inline-item"><a href="javascript:void(0)" [routerLink]="'/login'" [routerLinkActive]="'active-link'" [routerLinkActiveOptions]="{exact:true}" #rlal="routerLinkActive"  [tabindex]="rlal.isActive ? '-1' : '0'">Login</a></li>
       </ul>
     </div>
-  </ngbd-modal-component>
 </div>
 
-<div class="col-xs-12 applications-container">
-  <app-collapse-basic [buttonLabel]="'Applicazioni'" [id]="'idCollapse'"><app-application-form></app-application-form></app-collapse-basic>
-</div>
-
-<div class="row sections-container">
-  <div class="col-md-12 col-lg-4" *ngFor="let counter of counterArray; let i = index"
-    [hidden]="!sectionObjectList[i].show">
-    <app-counter [counter]="counter" [section]="sectionObjectList[i]" (onCounterClick)="counterClicked($event)">
-    </app-counter>
-  </div>
-</div>
 <div class="row">
-  <div class="col-md-12 col-lg-4" *ngFor="let section of sectionObjectList">
-    <app-section [section]="section" [sectionComponentArray]="sectionComponents" #sectionComponent
-      (onCounted)="onCounted($event)"></app-section>
+  <div class="col-12">
+    <router-outlet></router-outlet>
   </div>
 </div>
- -->
- <a href="javascript:void(0)" routerLink="/home">Home</a>
- <a href="javascript:void(0)" routerLink="/login">Login</a>
- <router-outlet></router-outlet>
- fghfg

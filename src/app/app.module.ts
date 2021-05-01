@@ -1,3 +1,4 @@
+import { CanDeactivateGuardService } from './service/can-deactivate-guard.service';
 import { RoutingModule } from './routing/routing.module';
 import { SchemaDetailComponent } from './model/schema-detail/schema-detail.component';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -24,6 +25,8 @@ import { ElementPerPageComponent } from './element-per-page/element-per-page.com
 import { ApplicationTableComponent } from './application-table/application-table.component';
 import { AuthComponent } from './auth/auth.component';
 import { MainComponent } from './main/main.component';
+import { IndexComponent } from './index/index.component';
+import { ModalConfirmComponent } from './bootstrap/modal-confirm/modal-confirm.component';
 
 
 @NgModule({
@@ -44,7 +47,9 @@ import { MainComponent } from './main/main.component';
     ElementPerPageComponent,
     ApplicationTableComponent,
     AuthComponent,
-    MainComponent
+    MainComponent,
+    IndexComponent,
+    ModalConfirmComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +63,8 @@ import { MainComponent } from './main/main.component';
   providers: [NgbActiveModal,
               /****** RequestInterceptorService ******/
               { provide: HTTP_INTERCEPTORS, useClass : RequestInterceptorService, multi:true },
-              { provide: DEFAULT_TIMEOUT, useValue: 30000 /*durata timeout*/ }],
+              { provide: DEFAULT_TIMEOUT, useValue: 30000 /*durata timeout*/ },
+              CanDeactivateGuardService],
               /****** RequestInterceptorService ******/
   bootstrap: [AppComponent]
 })

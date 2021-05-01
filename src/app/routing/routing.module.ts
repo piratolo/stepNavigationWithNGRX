@@ -1,3 +1,5 @@
+import { CanDeactivateGuardService } from './../service/can-deactivate-guard.service';
+import { IndexComponent } from './../index/index.component';
 import { RouteGuardService } from './../service/route-guard.service';
 import { MainComponent } from './../main/main.component';
 import { AppComponent } from './../app.component';
@@ -9,13 +11,18 @@ import { AuthComponent } from '../auth/auth.component';
 const routes:Routes = [
   {
     path: "",
-    redirectTo : "home",
+    redirectTo : "index",
     pathMatch : "full"
   },
   {
-    path: "home",
+    path: "index",
+    component: IndexComponent,
+  },
+  {
+    path: "console",
     component: MainComponent,
-    canActivate: [RouteGuardService]
+    canActivate: [RouteGuardService],
+    canDeactivate: [CanDeactivateGuardService]
   },
   {
     path:'login',

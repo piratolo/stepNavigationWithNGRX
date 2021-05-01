@@ -1,3 +1,5 @@
+import { NgbdModalConfirm } from './../bootstrap/modal-confirm/modal-confirm.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { environment } from './../../environments/environment';
 import { AuthService } from './../service/auth.service';
 import { EmitterService } from './../service/emitter.service';
@@ -6,19 +8,24 @@ import { ElementDataParser } from './../utility/elementDataParser';
 import { Counter } from './../model/counter';
 import { Section, SectionType, LoadType } from './../model/section.model';
 import { SectionComponent } from './../section/section.component';
-import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ChangeDetectorRef, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { CanComponentDeactivate } from '../service/can-deactivate-guard.service';
+import { Observable, Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss']
+  styleUrls: ['./main.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class MainComponent implements OnInit, AfterViewInit{
+export class MainComponent implements OnInit, AfterViewInit, CanComponentDeactivate, OnDestroy{
 
   sectionComponentArray:Array<SectionComponent> = [];
   @ViewChildren('sectionComponent') sectionComponents: QueryList<SectionComponent>;
 
   title = 'stepNavigation';
+  modalRef:any = null;
 
   sectionPrefix:string = "section";
 
@@ -44,7 +51,9 @@ export class MainComponent implements OnInit, AfterViewInit{
   elementDataParser:ElementDataParser;
   fillElementContainer:FillElementContainer;
 
-  constructor(private emitterService:EmitterService, private cd:ChangeDetectorRef, private authService:AuthService){;
+  private canDeactivateSubscription: Subscription;
+
+  constructor(private emitterService:EmitterService, private cd:ChangeDetectorRef, private authService:AuthService, public modalService: NgbModal){;
 
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
@@ -63,9 +72,50 @@ export class MainComponent implements OnInit, AfterViewInit{
     this.elementDetailDataParser.push(new ElementDataParser().elementDetaildataParser);
   }
 
-  ngOnInit(): void {
+  ngOnDestroy(): void {
+    if(this.modalRef){
+      this.modalRef.close();
+    }
+    if(this.canDeactivateSubscription){
+      this.canDeactivateSubscription.unsubscribe();
+    }
+  }
 
-    this.authService.autoLogin();
+  canDeactivate():boolean | Observable<boolean> | Promise<boolean>{
+    /* Questo codice apre programmaticamente la popup, quando si sta lasciando la pagina corrente e chiede all'utente
+    se vuole veramente lasciare la pagina */
+
+    return new Observable<boolean>((observer) => {
+      this.canDeactivateSubscription = this.authService.user.pipe(take(1)).subscribe(user=>{
+        if(this.canDeactivateSubscription){
+          this.canDeactivateSubscription.unsubscribe();
+         }
+        if(user){
+          this.modalRef = this.modalService.open(NgbdModalConfirm);
+          this.modalRef.componentInstance.modalTitle = "Conferma";
+          this.modalRef.componentInstance.modalContent = "Vuoi lasciare la pagina?";
+          this.modalRef.componentInstance.okButtonLabel = "Si";
+          this.modalRef.componentInstance.koButtonLabel = "No";
+          return this.modalRef.result.then(
+            result =>{
+              observer.next(true);
+            },
+            ()=>{
+              observer.next(false);
+            })
+            .catch(error=>{
+              observer.next(true);
+            });
+          }
+        else{
+          observer.next(true);
+          if(this.modalRef)this.modalRef.close();
+        }
+      });
+    });
+  }
+
+  ngOnInit(): void {
 
     for(var i = 0; i < 3; i++){
       this.counterArray.push(new Array<Counter>());
@@ -127,11 +177,9 @@ export class MainComponent implements OnInit, AfterViewInit{
     });
 
     this.counterArray[counter.SectionIndex].unshift(counter);
-    console.log(this.counterArray);
   }
 
   counterClicked(counterCliked:Counter){
-    console.log("AppComponent", counterCliked);
     this.emitterService.autoLoading.emit(counterCliked);
   }
 

@@ -6,6 +6,8 @@ import { ErrorHandler } from './../error/errorHandler';
 import { AuthService } from './../service/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { ActivatedRoute, NavigationEnd, Router, RoutesRecognized, ActivatedRouteSnapshot } from '@angular/router';
+import { filter, pairwise } from 'rxjs/operators';
 
 @Component({
   selector: 'app-auth',
@@ -21,11 +23,15 @@ export class AuthComponent implements OnInit {
   loginForm:FormGroup;
   errorHandler: ErrorHandler;
 
+  notAuthorizeMessage:string = "";
+
   private userSub:Subscription;
 
-  constructor(private formBuilder: FormBuilder, private authService:AuthService, private modalService: NgbModal) { }
+  constructor(private formBuilder: FormBuilder, private authService:AuthService, private modalService: NgbModal, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+   this.authService.setRedirectUrl(this.router.url);
+
     this.loginForm = this.formBuilder.group({
       "user" : ["", [Validators.required, Validators.pattern("[a-zA-Z@0-9]*")]],
       "password" : ["",  [Validators.required, Validators.pattern("[a-zA-Z@0-9]*")]]
@@ -43,6 +49,15 @@ export class AuthComponent implements OnInit {
         this.errorHandler.showError(this.modalService, error);
       }
     );
+
+    this.authService.notAuthorize.subscribe(notAuthorize => {
+      if(notAuthorize){
+        this.notAuthorizeMessage = "Per accedere alla pagina desiderata effettua prima il login"
+      }
+      else{
+        this.notAuthorizeMessage = "";
+      }
+    });
 
   }
 

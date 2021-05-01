@@ -175,6 +175,15 @@ app-collapse-basic{
   padding-left:0px;
 }
 
+.active-link{
+  font-weight: bold;
+  cursor: text;
+
+  &:hover, &:focus{
+    text-decoration: none;
+    outline: none;
+  }
+}
 
 
 

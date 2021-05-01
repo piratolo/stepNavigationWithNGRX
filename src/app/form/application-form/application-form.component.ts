@@ -31,7 +31,6 @@ export class ApplicationFormComponent implements OnInit {
   }
 
   onSubmit(){
-    console.dir(this.applicatonForm);
     this.loadData();
   }
 

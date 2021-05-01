@@ -1,9 +1,10 @@
 
-
-<div class="col-xs-12 applications-container">
-  <app-collapse-basic [buttonLabel]="'Applicazioni'" [id]="'idCollapse'"><app-application-form></app-application-form></app-collapse-basic>
+<!-- <ngbd-modal-focus [buttonLabel]="'Apri Modale'"></ngbd-modal-focus> -->
+<div class="row sections-container">
+  <div class="col-12 applications-container">
+    <app-collapse-basic [buttonLabel]="'Applicazioni'" [id]="'idCollapse'"><app-application-form></app-application-form></app-collapse-basic>
+  </div>
 </div>
-
 <div class="row sections-container">
   <div class="col-md-12 col-lg-4" *ngFor="let counter of counterArray; let i = index"
     [hidden]="!sectionObjectList[i].show">
