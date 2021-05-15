@@ -92,7 +92,7 @@ export class SectionUtility{
     switch(sectionComponent.section.loadType){
       case LoadType.LIST:
         sectionComponent.pages = []
-        sectionComponent.elementListData = [];
+        //sectionComponent.elementListData = null;
         break;
       case LoadType.DETAIL:
         sectionComponent.elementDetailData = [];

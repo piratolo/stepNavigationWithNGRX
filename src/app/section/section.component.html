@@ -1,6 +1,11 @@
 
 <div class="section" [hidden]="!section.show">
 
+
+<input type="submit" value="Aggiungi 1" (click)="aggiungi1()">
+<input type="submit" value="aggiungi 2" (click)="aggiungi2()">
+<input type="submit" value="aggiorna" (click)="aggiorna()">
+<input type="submit" value="cancella" (click)="cancella()">
   <div class="loading-ended" [innerHTML]="loadingEndedMessage" tabindex="0"></div>
 
   <div class="title"><h2><span [innerHTML]="titleSection">{{section.singleLabel}}</span><span class="float-right"><a href="javascript:void(0)" [hidden]="!closeDetailButton" class="close-button" (click)="closeDetail()">X</a></span></h2></div>
@@ -65,13 +70,14 @@
 
   <div class="data-container" *ngIf="dataContainer">
 
-    <div class="spinner-container" *ngIf="spinnerContainer" [innerHTML]="spinnerContainerMessage"></div>
+    <div class="spinner-container" *ngIf="(spinnerContainer | async)" [innerHTML]="spinnerContainerMessage">yyyyyyyyyyy</div>
 
-    <div class="list-container" [hidden]="!elementListContainer">
-      <div *ngIf="elementListData.elementi && elementListData.elementi < 1; else sectionTitle">{{section.noElementFound}}</div>
+    <div class="list-container" [hidden]="!elementListContainer" [hidden]="(spinnerContainer | async)">
+     <!--  <div *ngIf="elementListData.elementi && elementListData.elementi < 1; else sectionTitle">{{section.noElementFound}}</div> -->
       <div *ngIf="elementTitle"><h3 class="sr-only">Elenco {{section.pluralLabel}}</h3></div>
-      <div *ngFor="let element of elementListData.elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'" (click)="section.elementListClickSuccessCallBack(element.id, element.name)">{{element.name}}</a></div>
-
+      <div *ngIf="elementListData != null">
+      <div *ngFor="let element of (elementListData | async).elementi"><a href="javascript:void(0)" [attr.aria-label]="section.singleLabel + ' ' + element.name + ': visualizza dettaglio'" (click)="section.elementListClickSuccessCallBack(element.id, element.name)">{{element.name}}</a></div>
+    </div>
       <div class="pagination-container" [ngClass]="{marginTop: pages !=null && pages?.length > 0}" *ngIf="pages !=null && pages?.length > 0">
        <ul>
           <li *ngFor="let page of pages"><a [attr.href]="page.href ? (page.href  | trustedContent : 'url') : null" (click)="page.callback()" title="{{page.title}}" [attr.aria-label]="page.title">{{page.label}}</a></li>

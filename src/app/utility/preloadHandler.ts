@@ -13,23 +13,28 @@ export class PreloadHandler{
   }
 
   preload(sectionComponent:SectionComponent){
-    if(sectionComponent == null)return;
-    this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, false);
-    this.sectionUtility.callTypeHandler(sectionComponent);
-    this.sectionUtility.resetDataHandler(sectionComponent);
-    sectionComponent.loadingEndedMessage = "";
-    if(!sectionComponent.firstLoad){
+    try{
+      if(sectionComponent == null)return;
+      this.errorHandler.showSectionError(sectionComponent, sectionComponent.section, false);
+      this.sectionUtility.callTypeHandler(sectionComponent);
+      this.sectionUtility.resetDataHandler(sectionComponent);
+      sectionComponent.loadingEndedMessage = "";
+      if(!sectionComponent.firstLoad){
 
-      sectionComponent.spinnerContainerMessage = "Caricamento in corso";
+        sectionComponent.spinnerContainerMessage = "Caricamento in corso";
+      }
+
+      if(!sectionComponent.firstLoad && sectionComponent.spinnerContainerNativeElement){
+        sectionComponent.spinnerContainerNativeElement.setAttribute("role", "alert");
+      }
     }
-    sectionComponent.spinnerContainer = true;
-    if(!sectionComponent.firstLoad){
-      sectionComponent.spinnerContainerNativeElement.setAttribute("role", "alert");
+    catch(e){
+      console.log(e);
     }
+
   }
 
   postLoad(sectionComponent:SectionComponent, error?: Error){
-    sectionComponent.spinnerContainer = false;
     if(!sectionComponent.firstLoad){
       sectionComponent.spinnerContainerMessage = "";
       sectionComponent.loadingEndedMessage = "Caricamento terminato";

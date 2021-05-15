@@ -1,3 +1,4 @@
+import { environment } from './../environments/environment';
 import { CanDeactivateGuardService } from './service/can-deactivate-guard.service';
 import { RoutingModule } from './routing/routing.module';
 import { SchemaDetailComponent } from './model/schema-detail/schema-detail.component';
@@ -27,7 +28,13 @@ import { AuthComponent } from './auth/auth.component';
 import { MainComponent } from './main/main.component';
 import { IndexComponent } from './index/index.component';
 import { ModalConfirmComponent } from './bootstrap/modal-confirm/modal-confirm.component';
-
+import { StoreModule } from '@ngrx/store';
+import { appReducer } from './store/app.reducer';
+import * as fromApp from './store/app.reducer'
+import { EffectsModule } from '@ngrx/effects';
+import { AuthEffects } from './auth/store/auth.effects';
+import {StoreDevtoolsModule} from '@ngrx/store-devtools'
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
 
 @NgModule({
   declarations: [
@@ -58,7 +65,15 @@ import { ModalConfirmComponent } from './bootstrap/modal-confirm/modal-confirm.c
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
-    RoutingModule
+    RoutingModule,
+    /** Registriamo la classe che gestisce i reducer di tutta l'applicazione */
+    StoreModule.forRoot(fromApp.appReducer),
+    /** aggiungiamo questa riga per poter utilizzare lo Store Devtools di Chrome */
+    StoreDevtoolsModule.instrument({logOnly:environment.production}),
+     /** aggiungiamo questa riga per poter avere il tracciamento delle rotte nello Store Devtools di Chrome */
+    StoreRouterConnectingModule.forRoot(),
+    /** Registriamo gli effects legati all'application state */
+    EffectsModule.forRoot([AuthEffects])
   ],
   providers: [NgbActiveModal,
               /****** RequestInterceptorService ******/

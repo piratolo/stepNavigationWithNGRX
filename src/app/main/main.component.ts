@@ -11,7 +11,9 @@ import { SectionComponent } from './../section/section.component';
 import { Component, OnInit, AfterViewInit, ViewChildren, QueryList, ChangeDetectorRef, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { CanComponentDeactivate } from '../service/can-deactivate-guard.service';
 import { Observable, Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, map } from 'rxjs/operators';
+import * as fromApp from '../store/app.reducer'
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-main',
@@ -53,7 +55,13 @@ export class MainComponent implements OnInit, AfterViewInit, CanComponentDeactiv
 
   private canDeactivateSubscription: Subscription;
 
-  constructor(private emitterService:EmitterService, private cd:ChangeDetectorRef, private authService:AuthService, public modalService: NgbModal){;
+  constructor(
+    private emitterService:EmitterService,
+    private cd:ChangeDetectorRef,
+    private authService:AuthService,
+    public modalService: NgbModal,
+    private store: Store<fromApp.AppState>
+    ){;
 
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
     this.elementListSuccessCallBack.push(new FillElementContainer().fillElementList);
@@ -86,7 +94,13 @@ export class MainComponent implements OnInit, AfterViewInit, CanComponentDeactiv
     se vuole veramente lasciare la pagina */
 
     return new Observable<boolean>((observer) => {
-      this.canDeactivateSubscription = this.authService.user.pipe(take(1)).subscribe(user=>{
+      this.canDeactivateSubscription = this.store.select('auth').pipe(
+        take(1),
+        map(authStore => {
+          return authStore.user
+        })
+        )
+        .subscribe(user=>{
         if(this.canDeactivateSubscription){
           this.canDeactivateSubscription.unsubscribe();
          }
@@ -117,7 +131,7 @@ export class MainComponent implements OnInit, AfterViewInit, CanComponentDeactiv
 
   ngOnInit(): void {
 
-    for(var i = 0; i < 3; i++){
+    for(var i = 0; i < this.sectionList; i++){
       this.counterArray.push(new Array<Counter>());
     }
 
